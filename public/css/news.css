@@ -1,0 +1,16 @@
+.main {
+    /* 调整页面高度 */
+    min-height: calc(100vh - 120px);    
+}
+.jumbotron-bg {
+    background-image:url('../image/newhead.png');
+    background-size:cover;
+    background-position: center center;
+    min-height: 350px;
+    padding-top: 0;
+    padding-left: 0;
+
+}
+.bg-ligther {
+    background-color:rgba(255,255,255,0.35);
+}

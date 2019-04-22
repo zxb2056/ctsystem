@@ -1,0 +1,24 @@
+.main {
+    /* 调整页面高度 */
+    min-height: calc(100vh - 120px);    
+}
+.jumbotron-bg {
+    background-image:url('../image/yx3.png');
+    background-size:100% 100%;
+    background-position: center center;
+    /* background:no-repeat; */
+    min-height: 350px;
+    padding-top: 0;
+    padding-left: 0;
+    border: 1px solid yellowgreen;
+
+}
+.bg-ligther {
+    background-color:rgba(255,255,255,0.35);
+}
+
+@media (max-width: 768px){
+    .fullscreen {
+        display: none;
+    }
+}

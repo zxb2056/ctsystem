@@ -1,0 +1,80 @@
+body {
+    font-size: 14px;
+}
+@media (min-width: 768px) { 
+    
+
+ }
+
+.wrapper {
+    top:53px;
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+}
+
+#sidebar {
+    width: 250px;
+    position: fixed;
+    top: 53px;
+    left: 0;
+    height: 100vh;
+    z-index: 10;
+    background:#003366;
+    color: #fff;
+    transition: all 0.3s;
+    overflow:auto;
+    font-size:16px;
+}
+#sidebar.active {
+    margin-left: -250px;
+}
+#sidebar .sidebar-header {
+    padding: 20px;
+
+}
+.bg-ulcolor{
+    background-color: #003399;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+#sidebar ul li a {
+    color:#fff;
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+}
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+}
+
+
+
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+#content {
+    width: calc(100% - 250px);
+    padding: 20px;
+    transition: all 0.3s;
+    position: absolute;
+    top:0px;
+    bottom:0px;
+    right:0px;
+   
+}
+
+#content.active {
+    width: 100%;
+}

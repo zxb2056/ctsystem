@@ -1,0 +1,7 @@
+.main {
+    /* 调整页面高度 */
+    min-height: calc(100vh - 300px);    
+}
+.csize {
+    min-width: 400px;
+}

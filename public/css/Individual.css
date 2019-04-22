@@ -1,0 +1,33 @@
+body {
+    font-size: 14px;
+}
+.main {
+    min-height: calc(100vh - 275px); 
+}
+
+.header-carousel-item {
+    min-height: 400px;
+}
+.bg-cover {
+    background-size: cover;
+    background-position: center center;
+}
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.navbar-liebiao {
+    font-size:1rem;
+    letter-spacing: 3px;
+}
+p{
+    text-indent:2em;    /*每个P段落，首行空出两个空格，即缩进两个字符*/
+}
+.ellipsis {
+    max-width: 246px;
+    overflow:hidden; 
+    white-space:nowrap; 
+text-overflow:ellipsis; 
+} 
+.list-group-item a {
+    color:#000;
+}
