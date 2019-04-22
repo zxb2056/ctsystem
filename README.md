@@ -1,2 +1,0 @@
-# ctsystem
-cattle-manager
