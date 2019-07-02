@@ -48,4 +48,5 @@ class VeterController extends Controller
         return view('admin.manager.Veterinary.disinfection_history');
     }
 
+
 }

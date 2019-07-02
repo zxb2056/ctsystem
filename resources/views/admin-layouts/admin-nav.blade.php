@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-info px-0  fixed-top">
+<div class="navbar navbar-expand-md navbar-dark bg-info px-0  fixed-top">
     <div class="d-flex align-items-center">
       <a class=" ml-3" href="/dashboard.html">
         <span class="glyphicon glyphicon-home"></span>
@@ -27,4 +27,4 @@
 
       </ul>
     </div>
-  </nav>
+</div>

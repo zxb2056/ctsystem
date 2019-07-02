@@ -15,6 +15,36 @@
 @stop
 
 @section('content')
+<ul class="nav nav-tabs bg-light">
+        <li class="nav-item">
+                <a class="nav-link" href="{{url('/admin/manage/breed/mateInput')}}" >配种</a>
+              </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/yunjianinput')}}">孕检</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/chandu')}}">产犊</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/aftercare')}}">产后护理</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/waitmate')}}">待配母牛表</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/fanzhidisease')}}">繁殖病症诊疗卡</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/expected_birth')}}">预产期明细</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{url('/admin/manage/breed/mateplan')}}">配种计划表</a>
+          </li>
+        <li class="nav-item">
+          <a class="nav-link  active" href="{{ url('/admin/manage/breed/fanzhibaobiao')}}">繁殖报表</a>
+        </li>
+      </ul>
 <div class="card rounded-0 my-3">
                 <div class="card-header d-flex">
                         <div class="mr-auto"><strong>繁殖报表</strong></div>
@@ -161,7 +191,7 @@
                             <td>6%</td>
                         </tr>
                         <tr>
-                            <th>年空怀率</th>
+                            <th>青年牛首配日龄</th>
                             <td>10%</td>
                         </tr>
                         <tr>

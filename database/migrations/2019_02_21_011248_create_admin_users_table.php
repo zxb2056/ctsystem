@@ -24,6 +24,7 @@ class CreateAdminUsersTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        \DB::table('admin_users')->insert(['mobilePhone'=>'18037682708','username'=>'chentao111','email'=>'zxb2056@126.com','password'=>Hash::make('666666')]);
     }
 
     /**

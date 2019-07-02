@@ -3,7 +3,30 @@
 @include('admin-layouts.admin-head')
 @stop
 @section('css')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>配种月计划</title>
+<style>
+.matePlanList{
+  background-color:#CCCC99;
+  max-height:600px;
+}
+.year-plan{
+  border-bottom: 1px solid #777777;
+  padding: 3px;
+  width:100%;
+}
+.year-plan a{
+  color:black;
+}
+.year-plan a:visited{
+  font-size: 14px;
+  color:black;
+}
+.year-plan a:hover{ 
+text-decoration: none; 
+}
 
+</style>
 @stop
 
 @section('topnav')
@@ -15,249 +38,68 @@
 @stop
 
 @section('content')
+<ul class="nav nav-tabs bg-light">
+        <li class="nav-item">
+                <a class="nav-link" href="{{url('/admin/manage/breed/mateInput')}}" >配种</a>
+              </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/yunjianinput')}}">孕检</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/chandu')}}">产犊</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/aftercare')}}">产后护理</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/waitmate')}}">待配母牛表</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/fanzhidisease')}}">繁殖病症诊疗卡</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/breed/expected_birth')}}">预产期明细</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  active" href="{{url('/admin/manage/breed/mateplan')}}">配种计划表</a>
+          </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url('/admin/manage/breed/fanzhibaobiao')}}">繁殖报表</a>
+        </li>
+      </ul>
+      <ul class="nav nav-tabs bg-light mt-2">
+        <li class="nav-item">
+            <a class="nav-link  active" href="{{url('/admin/manage/breed/mateplan')}}">月计划</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url('/admin/manage/breed/mateplan/yearly')}}">年计划</a>
+          </li>
+      </ul>
 <div class="container-fluid">
-                <h5 class="my-3">繁殖计划表</h5>
-                <div class="row ">
-                    <div class="col-md-4">
-                        <div class="list-group sticky-top " id="mylist" role="tablist">
+    <div class="row">
+      <div class="col-sm-2 mt-3">
+        <ul class="matePlanList list-unstyled">
+          @foreach ($grouped as $k=>$item)
+          <li class="year-plan my-2 p-2">
+          <a href="#Submenu{{$k}}" data-toggle="collapse" aria-expanded="false" aria-controls="#Submenu{{$k}}" class="dropdown-toggle">{{$k}}年</a>
+          <div class="collapse" id="Submenu{{$k}}">
+          <ul  class="list-unstyled">
+          @foreach($item as $it)
+          <li class="month-plan p-2"><a href="/admin/manage/breed/mateplan?year={{$k}}&month={{$it['month']}}" class="text-muted">{{$it['month']}}月</a></li>
+          @endforeach
+        </ul>
+      </div>
+          </li>
+          @endforeach
 
-                            <a href="#pane-1"  class="list-group-item list-group-item-action active" data-toggle="list">年计划表</a>
-                            <a href="#pane-2" class="list-group-item list-group-item-action" data-toggle="list">月计划表</a>
+      </div>
 
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
+                
+                    <div class="col-sm-10">
                         <div class="tab-content">
-                            <div class="tab-pane show active" id="pane-1" role="tabpanel">
                                 <div class="card rounded-0 my-3">
                                     <div class="card-header">
-                                        <strong>年配种计划表</strong>
-                                    </div>
-                                    <div class="card-body table-responsive">
-
-                                        <table class="table table-hover border">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>月份</th>
-                                                    <th>1月</th>
-                                                    <th>2月</th>
-                                                    <th>3月</th>
-                                                    <th>4月</th>
-                                                    <th>5月</th>
-                                                    <th>6月</th>
-                                                    <th>7月</th>
-                                                    <th>8月</th>
-                                                    <th>9月</th>
-                                                    <th>10月</th>
-                                                    <th>11月</th>
-                                                    <th>12月</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <tr>
-                                                    <th rowspan="3" width="50px">上年受胎母牛数</th>
-                                                    <td>成年母牛</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>育成母牛</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>合计</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="3" width="50px">本年产犊母牛数</th>
-                                                    <td>成年母牛</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>育成母牛</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>合计</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <th rowspan="5" width="50px">本年配种母牛数</th>
-                                                    <td>成年母牛</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>头胎母牛</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>育成母牛</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>复配母牛</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>合计</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2">预期情期受胎率</td>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                    <td>3</td>
-                                                    <td>4</td>
-                                                    <td>5</td>
-                                                    <td>6</td>
-                                                    <td>7</td>
-                                                    <td>8</td>
-                                                    <td>9</td>
-                                                    <td>10</td>
-                                                    <td>11</td>
-                                                    <td>12</td>
-
-                                                </tr>
-
-                                            </tbody>
-
-                                        </table>
-
-                                    </div>
-                                    <div class="card-footer">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="pane-2" role="tabpanel">
-                                <div class="card rounded-0 my-3">
-                                    <div class="card-header">
-                                        <strong>**月计划表</strong>
+                                        <strong>{{$plans->year}}年{{$plans->month}}月计划表</strong>
                                     </div>
                                     <div class="card-body table-responsive">
 
@@ -271,33 +113,38 @@
                                             <tbody>
                                                 <tr>
                                                     <th>上月配种牛数</th>
-                                                    <td>25</td>
+                                                    <td>{{$plans->lastMonthMated}}</td>
 
                                                 </tr>
                                                 <tr>
                                                     <th>上月定胎牛数</th>
-                                                    <td>20</td>
+                                                    <td>{{$plans->lastMonthPregCheck}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>上月定胎怀孕牛数</th>
+                                                    <td>{{$plans->lastMonthPregCattleNum}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>上月定胎怀孕率</th>
+                                                    <td>{{$plans->lastMonthPregRation}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>本月预计配种牛头数</th>
-                                                    <td>30</td>
+                                                    <td>{{$plans->thisMonthMating}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>本月需要定胎牛头数</th>
-                                                    <td>22</td>
+                                                    <td>{{$plans->thisMonthPregCheck}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>本月预计产犊数</th>
-                                                    <td>16</td>
+                                                    <td>{{$plans->thisMonthCalv}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>本月预计冻精使用量</th>
-                                                    <td>58</td>
+                                                    <td>{{$plans->thisMonthSemenUse}}</td>
                                                 </tr>
-                                                <tr>
-                                                    <th>本月繁育可能遇到的问题</th>
-                                                    <td>需要人员辅助观察发情</td>
-                                                </tr>
+                                                
                                                 <tr>
                                                     <th>本月情期受胎率估测</th>
                                                     <td>60%</td>
@@ -312,10 +159,6 @@
 
                                     </div>
                                 </div>
-                              
-                    
-                              
-                            </div>
 
                         </div>
 
@@ -331,5 +174,5 @@
 @stop
 
 @section('js')
-
+<script type="text/javascript" src="/js/mateplan.js"></script>
 @stop

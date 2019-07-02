@@ -25,28 +25,42 @@
                </div>
                 <div class="card-body table-responsive">
                     <form action="{{ url('/admin/post/postlist')}}" method="get">
-                        <div class="card-header">
-                            <div class="d-flex align-items-baseline">
-                            <label for="showitem">每页显示：</label>
-                            <select name="showitem" id="showitem">
+                        <div class="row card-header">
+                        <div class="form-group form-row col-lg-3">
+                            <label for="showitem" class="col-sm-3 col-form-label">每页显示：</label>
+                            <div class="col-md-9">
+                            <select name="showitem" class="form-control" id="showitem">
                             <option value="6"  @if(!$datas || $datas[ 'showitem' ]==6) selected @endif) >6条</option>
                             <option value="10" @if($datas[ 'showitem' ]==10) selected @endif>10条</option>
                             <option value="20" @if($datas[ 'showitem' ]==20) selected @endif>20条</option>
                             <option value="30" @if($datas[ 'showitem' ]==30) selected @endif>30条</option>
                             <option value="50" @if($datas[ 'showitem' ]==50) selected @endif>50条</option>
                             </select>
-                                <span class="ml-5">筛选：</span>
-                                <span class="mx-1">文章标题：</span>
-                                <div class="align-self-baseline mr-4">
-                                <input  type="text" name="posttitle" value="{{ $datas[ 'posttitle' ]}}"> 
+                            </div>
+                        </div>
+                        <div class="form-group form-row col-lg-3">
+                            <label for="posttitle" class="col-sm-3 col-form-label">文章标题：</label>
+                            <div class="col-md-9">
+                                <input  type="text" name="posttitle" class="form-control" id="posttitle" value="{{ $datas[ 'posttitle' ]}}"> 
+                            </div>
+                        </div>
+                        <div class="form-group form-row col-lg-3">
+                                <label for="startdate" class="col-sm-3 col-form-label">起始日期</label>
+                                <div class="col-md-9">
+                                <input type="date" name="startdate" class="form-control" id="startdate" value="{{ $datas[ 'startdate' ]}}">
                                 </div>
-                                <span class="mx-1">日期</span>
-                                <input type="date" name="startdate" value="{{ $datas[ 'startdate' ]}}"><span class="mx-1">到</span><input type="date" name="stopdate"  value="{{ $datas[ 'stopdate' ]}}">
-                                <button  type="submit" class="btn btn-sm btn-outline-success ml-3">查询</button>
-                           
+                        </div>
+                        <div class="form-group form-row col-lg-3">
+                                <label for="stopdate" class="col-sm-3 col-form-label">截止日期</label>
+                                <div class="col-md-9">
+                                <input type="date" name="stopdate" class="form-control" value="{{ $datas[ 'stopdate' ]}}">
+                                </div>
+                        </div>
+                        <div class="form-group  form-row col-lg-3" >
+                                <input  type="submit" class="btn btn-outline-primary form-control">
+                           </div>
                             </div> 
                             
-                        </div>
                         </form>
 
                 

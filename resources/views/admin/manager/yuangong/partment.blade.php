@@ -49,8 +49,7 @@
                     <div class="card rounded-0 my-3">
                         <div class="card-header">
                             <div class="d-flex align-items-baseline">
-                              
-                                <a  class="btn btn-sm btn-outline-primary ml-auto" data-toggle="modal" data-target="#staffModal">新增</a>
+                                <a  href="" class="btn btn-sm btn-outline-primary ml-auto" data-toggle="modal" data-target="#staffModal">新增</a>
                                 <a  class="btn btn-sm btn-outline-primary ml-2 text-dark" href="/admin/manage/staff/department/truncate" onclick="return disp_confirm()">清空部门表</a>
                             </div> 
                         </div>

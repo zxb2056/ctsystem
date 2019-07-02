@@ -1,5 +1,5 @@
 <div class="wrapper">
-        <nav id="sidebar">
+        <div id="sidebar">
           <div class="sidebar-header py-2 mt-2">
             <h3>功能菜单</h3>
           </div>
@@ -42,7 +42,25 @@
                     <a href="{{ asset('/admin/manage/basic/barninfo') }}">牛舍信息表</a>
                   </li>
                   <li>
-                    <a href="{{ asset('/admin/manage/basic/semen') }}">冻精信息表</a>
+                    <a href="{{ asset('/admin/manage/basic/barnmapindividual') }}">配置牛舍</a>
+                  </li>
+                  <li>
+                    <a href="{{ asset('/admin/manage/basic/sireinfos') }}">公牛信息表</a>
+                  </li>
+                <li>
+                    <a href="{{ asset('/admin/manage/basic/cattle-pedigree') }}">牧场公牛库</a>
+                  </li>
+                  <li>
+                    <a href="{{ asset('/admin/manage/basic/semeninfos') }}">冻精信息表</a>
+                  </li>
+                  <li>
+                        <a href="{{ asset('/admin/manage/basic/mateInput/outPregCattle') }}">外购现有牛配种登记</a>
+                </li>
+                  <li>
+                    <a href="{{ asset('/admin/manage/basic/cattle-eliminate') }}">牛只淘汰</a>
+                  </li>
+                  <li>
+                    <a href="{{ asset('/admin/manage/basic/cattle-sale-common') }}">牛只出栏</a>
                   </li>
                                                   
                 </ul>
@@ -63,17 +81,17 @@
                                     <a href="{{asset('/admin/manage/breed/aftercare')}}">产后护理录入</a>
                                 </li>
                                 <li>
-                                    <a href="{{asset('/admin/manage/breed/mateplan')}}">配种计划表</a>
-                                </li>
-                                <li>
                                     <a href="{{asset('/admin/manage/breed/waitmate')}}">待配母牛表</a>
                                 </li>
-        
+                                       
                                 <li>
                                     <a href="{{asset('/admin/manage/breed/fanzhidisease')}}">繁殖疾病诊疗卡</a>
                                 </li>
                                 <li>
                                     <a href="{{asset('/admin/manage/breed/expected_birth')}}">预产期明细表</a>
+                                </li>
+                                <li>
+                                    <a href="{{asset('/admin/manage/breed/mateplan')}}">配种计划表</a>
                                 </li>
                                 <li>
                                     <a href="{{asset('/admin/manage/breed/fanzhibaobiao')}}">繁殖报表</a>
@@ -128,7 +146,7 @@
                         </li>
                        
                         <li>
-                            <a href="#manage" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">饲养管理</a>
+                            <a href="#manage" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">生产管理</a>
                             <ul class="collapse list-unstyled bg-ulcolor" id="manage">
                                 <li>
                                     <a href="{{asset('/admin/manage/feed/dieOut')}}">单个淘汰登记</a>
@@ -140,7 +158,7 @@
                                     <a href="{{asset('/admin/manage/feed/sell')}}">离场记录查询</a>
                                 </li>
                                 <li>
-                                    <a href="{{asset('/admin/manage/feed/zhuanshe')}}">牛只转舍登记</a>
+                                    <a href="{{asset('/admin/manage/feed/change_barn')}}">牛只转舍登记</a>
                                 </li>
                             </ul>
                         </li>
@@ -195,15 +213,12 @@
                                 </li>
                                 <li>
                                         <a href="{{asset('/admin/manage/material/semen_input')}}">冻精入库登记</a>
+                                </li>
+                                    <li>
+                                            <a href="{{asset('/admin/manage/material/semen_output')}}">冻精出库登记</a>
                                     </li>
                                     <li>
-                                        <a href="{{asset('/admin/manage/material/semen_broke')}}">冻精损坏登记</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{asset('/admin/manage/material/semen_broke_history')}}"> 冻精损坏明细</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{asset('/admin/manage/material/semen_ledger')}}">冻精使用台账</a>
+                                        <a href="{{asset('/admin/manage/material/semen/store_ledger')}}">冻精台账</a>
                                     </li>
                                     <li>
                                         <a href="{{asset('/admin/manage/material/semen_remain')}}">冻精库存</a>
@@ -221,7 +236,13 @@
                                 </li>
 
                                 <li>
-                                    <a href="{{asset('/admin/manage/staff/partment')}}">考勤管理</a>
+                                    <a href="{{asset('/admin/manage/staff/attendance')}}">考勤管理</a>
+                                </li>
+                                <li>
+                                    <a href="{{asset('/admin/manage/staff/partment')}}">部门管理</a>
+                                </li>
+                                <li>
+                                    <a href="{{asset('/admin/manage/staff/tmpworker')}}">临时用工</a>
                                 </li>
                             </ul>
                         </li>
@@ -229,7 +250,7 @@
                                     <a href="{{asset('/admin/manage/car')}}">车辆管理</a>
                         </li>
                         <li>
-                            <a href="{{asset('/admin/manage/special/productperformance')}}">生产性能测定</a>
+                            <a href="{{asset('/admin/manage/performance/growth')}}">生产性能测定</a>
                         </li>
                         <li>
                             <a href="{{asset('/admin/manage/special/bodyscore')}}">体型评分</a>
@@ -262,4 +283,4 @@
             </li>
         @endcan
           </ul>
-        </nav>
+</div>

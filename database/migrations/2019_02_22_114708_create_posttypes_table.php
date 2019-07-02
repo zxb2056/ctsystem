@@ -18,6 +18,13 @@ class CreatePosttypesTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
+        $data=array(
+            array('name'=>'新闻动态'),
+            array('name'=>'专业技术'),
+            array('name'=>'党建扶贫'),
+            array('name'=>'人才招聘'),
+        );
+        \DB::table('posttypes')->insert($data);
     }
 
     /**

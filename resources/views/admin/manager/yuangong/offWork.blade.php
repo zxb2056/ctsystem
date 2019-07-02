@@ -42,31 +42,53 @@
                                 </div>
                                 @endif
                 <div class="card-header d-flex">
-                    <div class="mr-auto"><strong>请假条列表</strong></div>
-
+                    <h5><strong>请假条列表</strong></h5>
+                    <a href="" class="btn btn-sm btn-outline-primary ml-auto" data-toggle="modal" data-target="#offWorkModal">新增</a>
 
                 </div>
-                <div class="card-body table-responsive">
-                    <div class="card rounded-0 my-3">
-                        <div class="card-header">
-                            <div class="d-flex align-items-baseline">
                             <form action="{{ url('/admin/manage/staff/offWork')}}" method="get">
-                                <span>每页显示：</span>
-                                <select name="showitem" >
-                                    <option value="10" @if(!$datas || $datas[ 'showitem' ]==10) selected @endif>10</option>
-                                    <option value="20" @if($datas[ 'showitem' ]==20) selected @endif>20</option>
-                                    <option value="30" @if($datas[ 'showitem' ]==30) selected @endif>30</option>
-                                    <option value="50" @if($datas[ 'showitem' ]==50) selected @endif>50</option>
+                            <div class="card-header">
+                        <div class="form-row">
+                        <div class="form-group form-row col-lg-3">
+                        <label for="showitem" class="col-md-3 col-form-label">每页显示</label>
+                        <div class="col-md-9">
+                                <select name="showitem" id="showitem" class="form-control" >
+                                <option value="10" @if(!$datas || $datas[ 'showitem' ]==10) selected @endif>10</option>
+                                <option value="20" @if($datas[ 'showitem' ]==20) selected @endif>20条</option>
+                                <option value="30" @if($datas[ 'showitem' ]==30) selected @endif>30条</option>
+                                <option value="50" @if($datas[ 'showitem' ]==50) selected @endif>50条</option>
                                 </select>
-                                <span class="ml-2">条</span>
-                                <button  type="submit" class="btn btn-sm btn-outline-success ml-3">提交</button>
+                                </div>
+                                </div>
+                                <div class="form-group form-row col-lg-3">
+                                <label for="staffName" class="col-md-3 col-form-label">姓名</label> 
+                            <div class="col-md-9">
+                            <input  type="text" class="form-control" id="staffName" name="name" value="{{ $datas[ 'name' ]}}"> 
+                            </div>
+                            </div>
+                            <div class="form-group form-row col-lg-3">
+                            <label for="querydate" class="col-sm-3 col-form-label">请假日期</label>
+                            <div class="col-md-9">
+                            <input type="date" class="form-control" name="startdate" value="{{ $datas[ 'startdate' ]}}" id="querydate">
+                            </div> 
+                            </div>
+                            <div class="form-group form-row col-lg-3">
+                                <label for="enddate" class="col-sm-3 col-form-label">截止日期</label>
+                                <div class="col-md-9">
+                                <input type="date" class="form-control" name="stopdate"  id="enddate" value="{{ $datas[ 'stopdate' ]}}"> 
+                                </div>
+                            </div> 
+                                <div class="form-group  form-row col-lg-3" >
+                                <div class="col-md-6">
+                                <input  type="submit" class="btn btn-sm btn-outline-success form-control">
+                                </div>
+                            </div>
+                            </div>
                                 </form>
-                                <a href="" class="btn btn-sm btn-outline-primary ml-auto" data-toggle="modal" data-target="#offWorkModal">新增</a>
+                               
                             </div> 
                         </div>
-                        <div class="card-body table-responsive">
-                            
-                            
+        <div class="card-body table-responsive">
           <table class="table table-hover border">
                 <thead>
                         <tr>

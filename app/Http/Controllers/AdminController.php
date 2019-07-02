@@ -6,17 +6,21 @@ use Illuminate\Http\Request;
 use DB;
 use App\Admin_user;
 
+
 class AdminController extends Controller
 {
     //
 
     public function index(){
         //如果文章类型表为空，则自动填充数据
-        $emp=DB::select('select 1 from `posttypes`');
-        if(empty($emp)){
-            DB::insert('insert into posttypes (name) values ("新闻动态"),("专业技术"),("党建扶贫"), ("人才招聘")');
-        }
-
+        // $emp=DB::select('select 1 from `posttypes`');
+        // if(empty($emp)){
+        //     DB::insert('insert into posttypes (name) values ("新闻动态"),("专业技术"),("党建扶贫"), ("人才招聘")');
+        // }
+        // $emp=DB::select('select 1 from `cattle_breed_varieties`');
+        // if(empty($emp)){
+        //     DB::insert('insert into cattle_breed_varieties (name) values ("安格斯"),("西门塔尔"),("夏洛来"), ("利木赞"),("和牛"),("秦川牛"),("南阳牛"),("夏南牛"),("荷斯坦奶牛"),("西杂牛")');
+        // }
         return view('admin.index');
     }
    

@@ -42,55 +42,147 @@
                                 </div>
                                 @endif
                 <div class="card-header d-flex">
-                    <div class="mr-auto"><strong>员工列表</strong></div>
-
+                    <h5><strong>员工列表</strong></h5>
+                    <form action="/admin/manage/staff/uploadattendance" method="POST" enctype="multipart/form-data" class="ml-auto border">
+                                {{csrf_field()}}
+                                <input type="file" name="attendancexls" >
+                                <button type="submit">导入</button>
+                                </form>
+                   
 
                 </div>
-                <div class="card-body table-responsive">
-                    <div class="card rounded-0 my-3">
+                <form action="{{ url('/admin/manage/staff/attendance')}}" method="get">
                         <div class="card-header">
-                            <div class="d-flex align-items-baseline">
-                                <span>每页显示：</span>
-                                <select name="pepleNum" >
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="30">30</option>
-                                    <option value="50">50</option>
+                        <div class="form-row">
+                        <div class="form-group form-row col-lg-3">
+                        <label for="showitem" class="col-md-3 col-form-label">每页显示</label>
+                        <div class="col-md-9">
+                                <select name="showitem" id="showitem" class="form-control" >
+                                <option value="10" @if(!$datas || $datas[ 'showitem' ]==10) selected @endif>10</option>
+                                <option value="20" @if($datas[ 'showitem' ]==20) selected @endif>20条</option>
+                                <option value="30" @if($datas[ 'showitem' ]==30) selected @endif>30条</option>
+                                <option value="50" @if($datas[ 'showitem' ]==50) selected @endif>50条</option>
                                 </select>
-                                <span class="ml-2">条</span>
-                                
-                                <a href="" class="btn btn-sm btn-outline-primary ml-auto" data-toggle="modal" data-target="#staffModal">新增</a>
-                            </div> 
+                                </div>
+                                </div>
+                                <div class="form-group form-row col-lg-3">
+                                <label for="staffName" class="col-md-3 col-form-label">姓名</label> 
+                            <div class="col-md-9">
+                            <input  type="text" class="form-control" id="staffName" name="name" value="{{ $datas['name']}}"> 
+                            </div>
+                            </div>
+                            <div class="form-group form-row col-lg-3">
+                                <label for="month" class="col-md-3 col-form-label">月份</label> 
+                            <div class="col-md-9">
+                            <select name="month" id="month" class="form-control" >
+                            <option value="" >指定月份</option>
+                            @foreach($months as $month)
+                                <option value="{{$month}}" >{{$month}}</option>
+                            @endforeach
+                            </select>
+                            </div>
+                            </div>
+                                <div class="form-group  form-row col-lg-3" >
+                                <div class="col-md-6">
+                                <input  type="submit" class="btn btn-sm btn-outline-success form-control">
+                                </div>
+                            </div>
+                            </div>
+                                </form>
                         </div>
                         <div class="card-body table-responsive">
                             
                             
-          <table class="table table-hover border">
+          <table class="table table-sm table-hover table-bordered" style="font-size:12px;">
                 <thead>
                         <tr>
                             <th>序号</th>
                             <th>员工姓名</th>
-                            <th>性别</th>
-                            <th>手机号</th>
-                            <th>出生年月</th>
-                            <th>入职日期</th>
-                            <th>学历</th>
-                            <th>毕业学校</th>
-                            <th>所学专业</th>
-                            <th>毕业日期</th>
-                            <th>特长爱好</th>
-                            <th>政治面貌</th>
-                            <th>所属部门</th>
+                            <th>年月</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                            <th>9</th>
+                            <th>10</th>
+                            <th>11</th>
+                            <th>12</th>
+                            <th>13</th>
+                            <th>14</th>
+                            <th>15</th>
+                            <th>16</th>
+                            <th>17</th>
+                            <th>18</th>
+                            <th>19</th>
+                            <th>20</th>
+                            <th>21</th>
+                            <th>22</th>
+                            <th>23</th>
+                            <th>24</th>
+                            <th>25</th>
+                            <th>26</th>
+                            <th>27</th>
+                            <th>28</th>
+                            <th>29</th>
+                            <th>30</th>
+                            <th>31</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                   
+                   @foreach($attends as $attend)
+                   <tr>
+                            <td>{{ (($attends->currentPage() - 1 ) * $attends->perPage() ) + $loop->iteration}}</td>
+                            <td>{{$attend->name}}</td>
+                            <td>{{$attend->month}}</td>
+                            <td>{{$attend->day1}}</td>
+                            <td>{{$attend->day2}}</td>
+                            <td>{{$attend->day3}}</td>
+                            <td>{{$attend->day4}}</td>
+                            <td>{{$attend->day5}}</td>
+                            <td>{{$attend->day6}}</td>
+                            <td>{{$attend->day7}}</td>
+                            <td>{{$attend->day8}}</td>
+                            <td>{{$attend->day9}}</td>
+                            <td>{{$attend->day10}}</td>
+                            <td>{{$attend->day11}}</td>
+                            <td>{{$attend->day12}}</td>
+                            <td>{{$attend->day13}}</td>
+                            <td>{{$attend->day14}}</td>
+                            <td>{{$attend->day15}}</td>
+                            <td>{{$attend->day16}}</td>
+                            <td>{{$attend->day17}}</td>
+                            <td>{{$attend->day18}}</td>
+                            <td>{{$attend->day19}}</td>
+                            <td>{{$attend->day20}}</td>
+                            <td>{{$attend->day21}}</td>
+                            <td>{{$attend->day22}}</td>
+                            <td>{{$attend->day23}}</td>
+                            <td>{{$attend->day24}}</td>
+                            <td>{{$attend->day25}}</td>
+                            <td>{{$attend->day26}}</td>
+                            <td>{{$attend->day27}}</td>
+                            <td>{{$attend->day28}}</td>
+                            <td>{{$attend->day29}}</td>
+                            <td>{{$attend->day30}}</td>
+                            <td>{{$attend->day31}}</td>
+                            <td>
+                            <a type="button" href='{{url("/admin/manage/staff/delete_attendance/{$attend->id}")}}' class="btn btn-sm btn-outline-primary mx-1 p-1" onclick="return disp_confirm()">删除</a>
+                            </td>
+                            </tr>
+
+                   @endforeach
                     </tbody>
 
           </table>
                     </div>
+
             <div class="card-footer">
+            {{$attends->appends($datas)->links()}}
             </div>
                     </div>
                 </div>
@@ -314,5 +406,5 @@
 @stop
 
 @section('js')
-
+<script type="text/javascript" src="/js/disp_confirm.js"></script>
 @stop

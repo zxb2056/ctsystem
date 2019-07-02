@@ -99,6 +99,9 @@ return [
     'attribute-name' => [
         'rule-name' => 'custom-message',
     ],
+    'cattleName'=> [
+        'unique'=>'该牛号同一日期已经存在，请核对',
+    ]
 ],
 
 /*
@@ -115,6 +118,8 @@ return [
 'attributes' => [
    // 'name'         => '名字',
    // 'age'         => '年龄',
+   'cattleID' =>'牛号',
+   'cattleName'=>'牛号',
 ],
 
 ];

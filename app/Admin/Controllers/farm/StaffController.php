@@ -12,6 +12,8 @@ use App\Models\Tempworker;
 use Excel;
 use App\imports\RegioncodeImport;
 use App\Models\Regioncode;
+use App\Models\StaffAttendance;
+use App\imports\StaffAttendanceImport;
 
 class StaffController extends Controller
 {
@@ -19,7 +21,28 @@ class StaffController extends Controller
     public function staff_list(Request $request){
         $datas=$request->all();
         $datas['showitem']=$request->input('showitem',10);//如果没有传值，默认10。
-        $staffs=Staff::paginate($request->input('showitem',10));
+        $datas['name']=$request->input('name','');
+        $datas['startdate']=$request->input('startdate','');
+        $datas['stopdate']=$request->input('stopdate','');
+
+        $staffs=Staff::where(function($query) use($datas){
+        $name=$datas['name'];
+         $query->where('name','like','%'.$name.'%');
+         })
+         ->where(function($query) use($datas){
+            $startdate=$datas['startdate'];
+            $stopdate=$datas['stopdate'];
+            if(!empty($startdate) && !empty($stopdate)){
+            $query->whereBetween('entryDate',[$startdate, $stopdate]);
+            }
+            if(!empty($startdate) && empty($stopdate)){
+                $query->where('entryDate','>=', $startdate); 
+            }
+            if(empty($startdate) && !empty($stopdate)){
+                $query->where('entryDate','<=', $stopdate); 
+            }
+        })
+        ->orderBy('id','desc')->paginate($request->input('showitem',10));
         return view('admin.manager.yuangong.staff_list',compact('staffs','datas'));
     }
     public function partment(){
@@ -155,11 +178,67 @@ class StaffController extends Controller
         public function offWork(Request $request){
             $datas=$request->all();
             $datas['showitem']=$request->input('showitem',10);//如果没有传值，默认10。
-            $qjts=OffWork::paginate($request->input('showitem',10));
+            $datas['name']=$request->input('name','');
+            $datas['startdate']=$request->input('startdate','');
+            $datas['stopdate']=$request->input('stopdate','');
+            $qjts=OffWork::where(function($query) use($datas){
+                $name=$datas['name'];
+                 $query->where('name','like','%'.$name.'%');
+                 })
+                 ->where(function($query) use($datas){
+                    $startdate=$datas['startdate'];
+                    $stopdate=$datas['stopdate'];
+                    if(!empty($startdate) && !empty($stopdate)){
+                    $query->whereBetween('startTime',[$startdate, $stopdate]);
+                    }
+                    if(!empty($startdate) && empty($stopdate)){
+                        $query->where('startTime','>=', $startdate); 
+                    }
+                    if(empty($startdate) && !empty($stopdate)){
+                        $query->where('startTime','<=', $stopdate); 
+                    }
+                })
+                ->paginate($request->input('showitem',10));
             return view('admin.manager.yuangong.offWork',compact('qjts','datas'));
         }
-        public function attendance(){
-            return view('admin.manager.yuangong.attendance');
+        //员工考勤页面
+        public function attendance(Request $request){
+            
+            $months=StaffAttendance::groupBy('month')->pluck('month')->toArray();
+            $endmonth=end($months);
+            // dd($endmonth);
+            // dd($attends[0]->month);
+            $datas=$request->all();
+            $datas['showitem']=$request->input('showitem',10);//如果没有传值，默认10。
+            $datas['name']=$request->input('name','');
+            $datas['month']=$request->input('month','');
+            $attends=StaffAttendance::where(function($query) use($datas){
+                $name=$datas['name'];
+                 $query->where('name','like','%'.$name.'%');
+                 })
+                 ->where(function($query) use($datas){
+                     
+                    $month=$datas['month'];
+                    if(!empty($month)){
+                        $query->where('month','=',$month); 
+                    }
+                  })
+                 ->paginate($request->input('showitem',10));
+                 $months=array_reverse($months); 
+            return view('admin.manager.yuangong.attendance',compact('attends','datas','months'));
+        }
+        //员工考勤表上传逻辑
+        public function uploadattendance(Request $request){
+            Excel::import(new StaffAttendanceImport,$request->file('attendancexls'));
+            return redirect()->back();
+
+        }
+        //删除考勤
+        public function attendance_delete($id){
+            $attendance=StaffAttendance::find($id);
+            $attendance->delete();
+            return redirect()->back();
+
         }
         public function offWorkStore(Request $request){
             
@@ -186,21 +265,27 @@ class StaffController extends Controller
         public function offWorkdelete(Request $request,$id){
             $offwork=Offwork::findOrFail($id);
             $offwork->delete();
+
             return redirect()->back();
         }
         //临时用工
         public function tmpworker_list(Request $request){
             $datas=$request->all();
             $datas['showitem']=$request->input('showitem',10);//如果没有传值，默认10。
-
-            $tempworkers=Tempworker::paginate($request->input('showitem',10));
+            $datas['name']=$request->input('name','');
+            $tempworkers=Tempworker::where(function($query) use($datas){
+                $name=$datas['name'];
+                 $query->where('name','like','%'.$name.'%');
+                 })
+                 ->paginate($request->input('showitem',10));
             $regioncodes=Regioncode::paginate(50);
 
             return view('admin.manager.yuangong.tempworker',compact('datas','tempworkers','regioncodes'));
         }
-        public function add_tmpworker(){
-            
-            return '123';
+        public function add_tmpworker(Request $request){
+            $tmpworkers=$request->all();
+            Tempworker::create($tmpworkers);         
+            return redirect()->back();
         }
         public function importcode(Request $request){
             // dd($request->file('xzqcode'));
@@ -208,6 +293,16 @@ class StaffController extends Controller
             Excel::import(new RegioncodeImport,$request->file('xzqcode'));
             return redirect()->back();
         }
-
+        public function delete_tmpworker($id){
+            $deltemp=Tempworker::findOrFail($id);
+            $deltemp->delete();
+            return redirect()->back();
+        }
+        public function update_tmpworker(Request $request){
+            $datas=$request->all();
+            $updatetemp=Tempworker::findOrFail($request->id);
+            $updatetemp->update($datas);
+            return redirect()->back();
+        }
 
 }

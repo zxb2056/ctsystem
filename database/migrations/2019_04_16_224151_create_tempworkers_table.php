@@ -20,7 +20,7 @@ class CreateTempworkersTable extends Migration
             $table->string('mobilePhone');
             $table->string('personid');
             $table->date('startDay');
-            $table->date('endDay');
+            $table->date('endDay')->nullable();
             $table->string('workContent');
             $table->float('dailySalary')->nullable();
             $table->float('totalSalary')->nullable();

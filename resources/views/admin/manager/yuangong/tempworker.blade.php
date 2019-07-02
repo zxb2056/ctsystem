@@ -43,24 +43,37 @@
                                 @endif
                 <div class="card-header d-flex">
                     <div class="mr-auto"><strong>员工列表</strong></div>
-
+                    <a href="" class="btn btn-sm btn-outline-primary ml-auto " data-toggle="modal" data-target="#tempworkerModal">新增</a>
 
                 </div>
-            <div class="card-body table-responsive">
-                    <div class="card rounded-0 my-3">
+
+                <form action="{{ url('/admin/manage/staff/tmpworker')}}" method="get">
                         <div class="card-header">
-                            <div class="d-flex align-items-baseline">
-                                <span>每页显示：</span>
-                                <select name="showitem" >
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="30">30</option>
-                                    <option value="50">50</option>
+                        <div class="form-row">
+                        <div class="form-group form-row col-lg-3">
+                        <label for="showitem" class="col-md-3 col-form-label">每页显示</label>
+                        <div class="col-md-9">
+                                <select name="showitem" id="showitem" class="form-control" >
+                                <option value="10" @if(!$datas || $datas[ 'showitem' ]==10) selected @endif>10</option>
+                                <option value="20" @if($datas[ 'showitem' ]==20) selected @endif>20条</option>
+                                <option value="30" @if($datas[ 'showitem' ]==30) selected @endif>30条</option>
+                                <option value="50" @if($datas[ 'showitem' ]==50) selected @endif>50条</option>
                                 </select>
-                                <span class="ml-2">条</span>
-                                
-                                <a href="" class="btn btn-sm btn-outline-primary ml-auto" data-toggle="modal" data-target="#staffModal">新增</a>
-                            </div> 
+                                </div>
+                                </div>
+                                <div class="form-group form-row col-lg-3">
+                                <label for="staffName" class="col-md-3 col-form-label">姓名</label> 
+                            <div class="col-md-9">
+                            <input  type="text" class="form-control" id="staffName" name="name" value="{{ $datas['name']}}"> 
+                            </div>
+                            </div>
+                                <div class="form-group  form-row col-lg-3" >
+                                <div class="col-md-6">
+                                <input  type="submit" class="btn btn-sm btn-outline-success form-control">
+                                </div>
+                            </div>
+                            </div>
+                                </form>
                         </div>
                         <div class="card-body table-responsive">
                             
@@ -88,7 +101,7 @@
                     <tbody>
                     @foreach($tempworkers as $tempworker)
                    <tr>
-                   <td>1</td>
+                   <td>{{ (($tempworkers->currentPage() - 1 ) * $tempworkers->perPage() ) + $loop->iteration}}</td>
                    <td>{{$tempworker->name}}</td>
                    <td>{{$tempworker->gender}}</td>
                    <td>{{$tempworker->mobilePhone}}</td>
@@ -102,69 +115,26 @@
                    <td>{{$tempworker->payDate}}</td>
                    <td>{{$tempworker->note}}</td>
                    <td>{{$tempworker->fill_form_by}}</td>
-                   <td>编辑 删除</td>
+                   <td> 
+                <a type="button"  href='' class="btn btn-sm btn-outline-primary p-1 mx-1" data-toggle="modal" data-target="#updateModal" data-id="{{$tempworker->id}} " data-name="{{$tempworker->name}}" data-gender="{{ $tempworker->gender}}" data-mobilephone="{{ $tempworker->mobilePhone }}" data-personid ="{{ $tempworker->personid }}" data-startday="{{ $tempworker->startDay }}" data-endday="{{ $tempworker->endDay }}" data-workcontent="{{ $tempworker->workContent }}" data-dailysalary="{{ $tempworker->dailySalary }}" data-totalsalary="{{ $tempworker->totalSalary }}" data-paystatus="{{ $tempworker->payStatus }}" data-payday="{{$tempworker->payDate }}" data-note="{{$tempworker->note }}" data-filler="{{$tempworker->fill_form_by }}">编辑</a>
+                <a type="button" href='{{url("/admin/manage/staff/delete_tmpworker/{$tempworker->id}")}}' class="btn btn-sm btn-outline-primary mx-1 p-1" onclick="return disp_confirm()">删除</a></td>
                     </tr>
                    @endforeach
                     </tbody>
 
           </table>
             </div>
-            <div class="card-footer">
-            {{$tempworkers->links()}}
+            <div class="card-footer d-flex justify-content-center">
+            {{$tempworkers->appends($datas)->links()}}
             </div>
             </div>
-            </div>
-            </div>
-    
-            <div class="card-header d-flex">
-                    <div class="mr-auto"><strong>省市县行政区划表</strong></div>
-                    <div class="d-flex align-items-baseline">
-                                <span>每页显示：</span>
-                                <select name="showitem" >
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="30">30</option>
-                                    <option value="50">50</option>
-                                </select>
-                                <span class="ml-2">条</span>
-                                <form action="/admin/manage/staff/uploadCode" method="POST" enctype="multipart/form-data">
-                                {{csrf_field()}}
-                                <input type="file" name="xzqcode" >
-                                <button type="submit">导入</button>
-                                </form>
-                            </div> 
-                </div>
-                <div class="card-body table-responsive">
-                            
-                            
-                            <table class="table table-hover border">
-                                  <thead>
-                                          <tr>
-                                              <th>序号</th>
-                                              <th>编码</th>
-                                              <th>省市县名称</th>
-                                              
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                      @foreach($regioncodes as $regioncode)
-                                        <tr>
-                                     <td>1</td>
-                                     <td>{{$regioncode->regioncode}}</td>
-                                     <td>{{$regioncode->divisions}}</td>
-                                     </tr>
-                                     @endforeach
-                                        
-                             </tbody>
-                  
-                            </table>
-                            {{$regioncodes->links()}}
-                              </div>
 
- 
+
+    
+    
       
 <!-- listModal -->
-<div class="modal fade" id="staffModal" tabindex="-1" role="dialog"  data-backdrop="static">
+<div class="modal fade" id="tempworkerModal" tabindex="-1" role="dialog"  data-backdrop="static">
 <div class="modal-dialog" role="document" >
     <div class="modal-content">
         <div class="modal-header">
@@ -179,16 +149,16 @@
                     <strong>新增用工情况</strong>
                 </div>
                 <div class="card-body ">
-                    <form action="/admin/manage/staff/add_tmpworker" method="POST">
+                    <form action="/admin/manage/staff/add_tmpworker" method="POST" class="was-validated">
                     {{ csrf_field() }}
                         <div class="form-group row">
-                            <label for="addstaffname" class="col-sm-3 col-form-label">员工姓名</label>
+                            <label for="addstaffname" class="col-sm-3 col-form-label">姓名</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="addstaffname" name="name" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label  class="col-md-3 col-form-label">员工性别</label>
+                            <label  class="col-md-3 col-form-label">性别</label>
                                 <div class="col-md-9">
                                     <div class="custom-control custom-radio custom-control-inline ">
                                         <input class="custom-control-input " type="radio" name="gender" id="addinlineRadio1"
@@ -203,58 +173,68 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="addstaffPhone" class="col-sm-3 col-form-label">员工手机号</label>
+                            <label for="addstaffPhone" class="col-sm-3 col-form-label">手机号</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="addstaffPhone" name="telephone" >
+                                <input type="text" class="form-control" id="addstaffPhone" name="mobilePhone" required >
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="addbirthDay" class="col-sm-3 col-form-label">出生年月</label>
+                            <label for="addPID" class="col-sm-3 col-form-label">身份证号</label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control" id="addbirthDay" name="birthday">
+                                <input type="text" class="form-control" id="addPID" name="personid" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="addenterday" class="col-sm-3 col-form-label">入职日期</label>
+                            <label for="addstartday" class="col-sm-3 col-form-label">入职日期</label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control" id="addenterday" name="entryDate">
+                                <input type="date" class="form-control" id="addstartday" name="startDay" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="addEducation" class="col-sm-3 col-form-label">学历</label>
+                            <label for="addendday" class="col-sm-3 col-form-label">结束日期</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="addEducation" name="eduDegree">
+                                <input type="date" class="form-control" id="addendday" name="endDay">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="addGraduate_school" class="col-sm-3 col-form-label">毕业学校</label>
+                            <label for="addworkContent" class="col-sm-3 col-form-label">工作内容</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="addGraduate_school" name="school">
+                                <input type="text" class="form-control" id="addworkContent" name="workContent" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="addmajor" class="col-sm-3 col-form-label">所学专业</label>
+                            <label for="adddailySalary" class="col-sm-3 col-form-label">日工资额</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="addmajor" name="major">
+                                <input type="text" class="form-control" id="adddailySalary" name="dailySalary" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="addgradudate" class="col-sm-3 col-form-label">毕业时间</label>
+                            <label for="addtotalSalary" class="col-sm-3 col-form-label">总工资额</label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control" id="addgradudate" name="gradudate">
+                                <input type="text" class="form-control" id="addtotalSalary" name="totalSalary">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="addspecial" class="col-sm-3 col-form-label">特长爱好</label>
+                            <label for="addpayStatus" class="col-sm-3 col-form-label">支付状态</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="addspecial" name="special">
+                            <select name="payStatus" id="addpayStatus" class="form-control">
+                            <option value="未付">未付</option>
+                            <option value="已付">已付</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="addpayDate" class="col-sm-3 col-form-label">支付日期</label>
+                            <div class="col-sm-9">
+                                <input type="date" class="form-control" id="addpayDate" name="payDate">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="addPolitical_status" class="col-sm-3 col-form-label">政治面貌</label>
+                            <label for="addnote" class="col-sm-3 col-form-label">说明</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="addPolitical_status" name="Political_status">
+                                <input type="text" class="form-control" id="addnote" name="note">
+                                <input type="hidden" name="fill_form_by" value="{{Auth::user()->username}} ">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -284,81 +264,93 @@
                     <strong>修改员工信息</strong>
                 </div>
                 <div class="card-body ">
-                    <form action="/admin/manage/staff/edit_staff" method="POST">
+                    <form action="/admin/manage/staff/update_tmpworker" method="POST" class="was-validated">
                     {{ csrf_field() }}
                         <div class="form-group row">
-                            <label for="staffname" class="col-sm-3 col-form-label">员工姓名</label>
+                            <label for="upstaffname" class="col-sm-3 col-form-label">姓名</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="staffname" name="name" required>
-                                <input type="hidden" name="id" id="id">
+                                <input type="text" class="form-control" id="upstaffname" name="name" required>
+                                <input type="hidden" id="id" name="id">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label  class="col-md-3 col-form-label">员工性别</label>
+                            <label  class="col-md-3 col-form-label">性别</label>
                                 <div class="col-md-9">
                                     <div class="custom-control custom-radio custom-control-inline ">
-                                        <input class="custom-control-input " type="radio" name="gender" id="upinlineRadio1" value="1" >
+                                        <input class="custom-control-input " type="radio" name="gender" id="upinlineRadio1"
+                                            value="男"  >
                                         <label class="custom-control-label " for="upinlineRadio1" >男</label>
                                     </div>
                                     <div class="custom-control custom-radio custom-control-inline">
-                                        <input class="custom-control-input" type="radio" name="gender" id="upinlineRadio2"  value="2" >
+                                        <input class="custom-control-input" type="radio" name="gender" id="upinlineRadio2"
+                                            value="女" >
                                         <label class="custom-control-label" for="upinlineRadio2">女</label>
                                     </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="staffPhone" class="col-sm-3 col-form-label">员工手机号</label>
+                            <label for="upmobilePhone" class="col-sm-3 col-form-label">手机号</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="staffPhone" name="telephone" >
+                                <input type="text" class="form-control" id="upmobilePhone" name="mobilePhone" required >
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="birthDay" class="col-sm-3 col-form-label">出生年月</label>
+                            <label for="upPID" class="col-sm-3 col-form-label">身份证号</label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control" id="birthDay" name="birthday">
+                                <input type="text" class="form-control" id="upPID" name="personid" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="enterDate" class="col-sm-3 col-form-label">入职日期</label>
+                            <label for="upstartday" class="col-sm-3 col-form-label">入职日期</label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control" id="enterDate" name="entryDate">
+                                <input type="date" class="form-control" id="upstartday" name="startDay" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="Education" class="col-sm-3 col-form-label">学历</label>
+                            <label for="upendday" class="col-sm-3 col-form-label">结束日期</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="Education" name="eduDegree">
+                                <input type="date" class="form-control" id="upendday" name="endDay">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="Graduate_school" class="col-sm-3 col-form-label">毕业学校</label>
+                            <label for="upworkContent" class="col-sm-3 col-form-label">工作内容</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="Graduate_school" name="school">
+                                <input type="text" class="form-control" id="upworkContent" name="workContent" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="major" class="col-sm-3 col-form-label">所学专业</label>
+                            <label for="updailySalary" class="col-sm-3 col-form-label">日工资额</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="major" name="major">
+                                <input type="text" class="form-control" id="updailySalary" name="dailySalary" required>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="gradudate" class="col-sm-3 col-form-label">毕业时间</label>
+                            <label for="uptotalSalary" class="col-sm-3 col-form-label">总工资额</label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control" id="gradudate" name="gradudate">
+                                <input type="text" class="form-control" id="uptotalSalary" name="totalSalary">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="special" class="col-sm-3 col-form-label">特长爱好</label>
+                            <label for="uppayStatus" class="col-sm-3 col-form-label">支付状态</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="special" name="special">
+                            <select name="payStatus" id="uppayStatus" class="form-control">
+                            <option value="未付">未付</option>
+                            <option value="已付">已付</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="uppayDate" class="col-sm-3 col-form-label">支付日期</label>
+                            <div class="col-sm-9">
+                                <input type="date" class="form-control" id="uppayDate" name="payDate">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="Political_status" class="col-sm-3 col-form-label">政治面貌</label>
+                            <label for="upnote" class="col-sm-3 col-form-label">说明</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="Political_status" name="Political_status">
+                                <input type="text" class="form-control" id="upnote" name="note">
+                                <input type="hidden" name="fill_form_by" value="{{Auth::user()->username}} ">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -380,5 +372,44 @@
 @stop
 
 @section('js')
+<script type="text/javascript" src="/js/disp_confirm.js"></script>
+<script type="text/javascript">
+$('#updateModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) 
+    var id=button.data('id')
+    var name=button.data('name')
+    var gender=button.data('gender')
+    var mobilePhone=button.data('mobilephone')
+    var personid=button.data('personid')
+    var startDay=button.data('startday')
+    var endDay=button.data('endday')
+    var workContent=button.data('workcontent')
+    var dailySalary=button.data('dailysalary')
+    var totalSalary=button.data('totalsalary')
+    var payStatus=button.data('paystatus')
+    var payDate=button.data('payday')
+    var note=button.data('note')
+    var modal = $(this)
 
+  modal.find('.modal-body #id').val(id)
+  modal.find('.modal-body #upstaffname').val(name)
+  modal.find('.modal-body #upmobilePhone').val(mobilePhone)
+  modal.find('.modal-body #upPID').val(personid)
+  modal.find('.modal-body #upstartday').val(startDay)
+  modal.find('.modal-body #upendday').val(endDay)
+  modal.find('.modal-body #upworkContent').val(workContent)
+  modal.find('.modal-body #updailySalary').val(dailySalary)
+  modal.find('.modal-body #uptotalSalary').val(totalSalary)
+  modal.find('.modal-body #uppayStatus').val(payStatus)
+  modal.find('.modal-body #uppayDate').val(payDate)
+  modal.find('.modal-body #upnote').val(note)
+  if(gender == '男'){
+    modal.find('.modal-body input#upinlineRadio1').prop('checked','checked')
+  }else{
+    modal.find('.modal-body input#upinlineRadio2').prop('checked','checked')
+  }
+ 
+
+})
+</script>
 @stop

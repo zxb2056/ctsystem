@@ -52,10 +52,9 @@ body {
     color: #7386D5;
     background: #fff;
 }
-#sidebar ul li.active>a,
-a[aria-expanded="true"] {
+#sidebar ul li.active>a{
     color: #fff;
-    background: #6d7fcc;
+    background: #9fa9d3;
 }
 
 

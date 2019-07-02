@@ -19,6 +19,7 @@ class ClientController extends Controller
 {
     //
     public function index(){
+        Redis::flushdb();
         if(Redis::exists('index:views')){
             $indexView = Redis::get('index:views');
            return $indexView;

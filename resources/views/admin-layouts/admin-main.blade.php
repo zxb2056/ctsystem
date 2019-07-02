@@ -1,6 +1,8 @@
+
 @section('head')
 这里是头部
 @show
+@yield('title')
 @section('css')
 this is css
 @show
