@@ -3,8 +3,7 @@
 @include('admin-layouts.admin-head')
 @stop
 @section('css')
-
-@stop
+<title>检疫历史记录</title>
 
 @section('topnav')
 @include('admin-layouts.admin-nav')
@@ -21,93 +20,91 @@
                        
                     
                 </div>
-                <div class="card-body table-responsive">
-                        <div class="card rounded-0 my-3">
-                                <div class="card-header">
-                                        <strong>增加检疫记录</strong>
-                                    
-                                </div>
-                                <div class="card-body ">
-                                        <form>
-                                                <div class="form-group row">
-                                                  <label for="niuhao" class="col-sm-3 col-form-label">牛号</label>
-                                                  <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="niuhao" >
-                                                  </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                  <label for="jianyiriqi" class="col-sm-3 col-form-label">检疫日期</label>
-                                                  <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="jianyiriqi" >
-                                                  </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                        <label for="inspectname" class="col-sm-3 col-form-label">检疫类型</label>
-                                                        <div class="col-sm-9">
-                                                                <select class="custom-select" name="inspectType" id="inspectType">
-                                                                        <option value="1">结核病</option>
-                                                                        <option value="2">布氏杆菌病</option>
-                                                                        <option value="3">口蹄疫</option>
-                                                                        <option value="4">副结核</option>
-                                                                        <option value="5">病毒性腹泻</option>
-                                                                        <option value="6">粘膜病</option>
-                                                                        <option value="7">牛传染性鼻气管炎</option>
-                                                                    </select>
-                                                        </div>
-                                                      </div>
-                                                <div class="form-group row">
-                                                        <label for="inspecttype" class="col-sm-3 col-form-label">检疫方式</label>
-                                                        <div class="col-sm-9">
-                                                                <select class="custom-select" name="inspectType" id="inspectType">
-                                                                        <option value="1">皮内</option>
-                                                                        <option value="2">皮下</option>
-                                                                        <option value="3">血检</option>
-                                                                        <option value="4">肌注</option>
-                                                                    </select>
-                                                        </div>
-                                                      </div>
-                                                    
-                                                      <div class="form-group row">
-                                                            <label for="inspectAddr" class="col-sm-3 col-form-label">检疫地点</label>
-                                                            <div class="col-sm-9">
-                                                              <input type="text"  class="form-control" id="inspectAddr" placeholder="牧场内或实验室所在地" >
-                                                            </input>
-                                                            </div>
+
+                        <div class="card-header">
+                                <form action="" method="get">
+                                        <div class="form-row align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="input-group mb-2">
+                                                          <div class="input-group-prepend">
+                                                            <div class="input-group-text">每页显示</div>
                                                           </div>
-                                                          <div class="form-group row">
-                                                                <label for="result" class="col-sm-3 col-form-label">检疫结果</label>
-                                                                <div class="col-sm-9">
-                                                                    
-                                                                  <select class="custom-select" name="inspectResult" id="inspectResult">
-                                                                      <option value="1">阴性</option>
-                                                                      <option value="2">阳性</option>
-                                                                  </select>
-                                                                </div>
-                                                              </div>
-                                                              <div class="form-group row">
-                                                                    <label for="zeren" class="col-sm-3 col-form-label">责任人</label>
-                                                                    <div class="col-sm-9">
-                                                                      <input type="text" class="form-control" id="zeren" >
-                                                                    </div>
-                                                                  </div>
-            
-                                              </form>
-                
-                            
-                               
-                                  </div>
-                                  <div class="d-flex justify-content-center">
-                                        <button class="btn btn-outline-success justify-content-end" type="submit">提交</button>
-                                      </div>
-                                  </div>
-       
-            
-               
-                  </div>
-              
+                                                          <select name="showitem" id="showitem" class="form-control">
+                                                            <option value="10" @if($datas['showitem'] == '10') selected @endif>10条</option>
+                                                            <option value="20" @if($datas['showitem'] == '20') selected @endif>20条</option>
+                                                            <option value="30" @if($datas['showitem'] == '30') selected @endif>30条</option>
+                                                            <option value="50" @if($datas['showitem'] == '50') selected @endif>50条</option>
+                                                          </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                        <div class="input-group mb-2">
+                                                          <div class="input-group-prepend">
+                                                            <div class="input-group-text">牛号</div>
+                                                          </div>
+                                                        <input type="text" class="form-control" id="cattleID" name="cattleID" value="">
+                                                        </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                        <div class="input-group mb-2">
+                                                          <div class="input-group-prepend">
+                                                            <div class="input-group-text">起始日期</div>
+                                                          </div>
+                                                        <input type="date" class="form-control" id="startDate" name="startDate" value="{{$datas['startDate']}}">
+                                                        </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                        <div class="input-group mb-2">
+                                                          <div class="input-group-prepend">
+                                                            <div class="input-group-text">截止日期</div>
+                                                          </div>
+                                                          <input type="date" class="form-control" id="stopDate" name="stopDate" value="{{$datas['stopDate']}}">
+                                                        </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary mb-2">查询</button>
+                                                </div>
+                                        </div>                                 
+                                </form>
+                            </div>
+                            <div class="card-body table-responsive">
+                                <table class="table table-hover border">
+                              <thead>
+                                      <tr>
+                                          <th>序号</th>
+                                          <th>牛号</th>
+                                          <th>检疫日期</th>
+                                          <th>检疫类型</th>
+                                          <th>检疫方式</th>
+                                          <th>检疫地点</th>
+                                          <th>检疫结果</th>
+                                          <th>责任人</th>
+                                          
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      @foreach($qua_history as $qua)
+                                      <tr>
+                                      <td>{{(($qua_history->currentPage() - 1)* $qua_history->perPage())+$loop->iteration}}</td>
+                                          <td>{{$qua->cattleID}}</td>
+                                          <td>{{$qua->quarantine_day}}</td>
+                                          <td>{{$qua->quarantine_disease}}</td>
+                                          <td>{{$qua->quarantine_method}}</td>
+                                          <td>{{$qua->quarantine_addr}}</td>
+                                          <td>{{$qua->result}}</td>
+                                          <td>{{$qua->pic}}</td>
+                                      </tr>
+                                      @endforeach
+                                  </tbody>
+                                </table>
+                        </div>
+                        <div class="card-footer d-flex justify-content-center">
+                        {{$qua_history->appends($datas)->links()}}
+                        </div>
                   </div>
             
         </div>
+
 
 @stop
 

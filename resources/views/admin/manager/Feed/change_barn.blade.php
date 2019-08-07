@@ -3,7 +3,7 @@
 @include('admin-layouts.admin-head')
 @stop
 @section('css')
-<title>牛舍信息</title>
+<title>转舍登记</title>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
@@ -17,20 +17,16 @@
 
 @section('content')
 <ul class="nav nav-tabs bg-light">
-  <li class="nav-item">
-    <a class="nav-link" href="{{url('/admin/manage/basic/cattleinfo')}}">单个牛淘汰登记</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{{url('/admin/manage/basic/barninfo')}}">批量出售登记</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{{url('/admin/manage/basic/barnmapindividual')}}">离场记录查询</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link  active" href="{{url('/admin/manage/feed/change_barn')}}">牛只转舍登记</a>
-  </li>
-
-</ul>
+    <li class="nav-item">
+      <a class="nav-link" href="{{url('/admin/manage/feed/dieOut')}}">淘汰登记</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{url('/admin/manage/feed/sell_batch')}}">整舍出售登记</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="{{url('/admin/manage/feed/change_barn')}}">转舍登记</a>
+    </li>
+ </ul>
 <div class="card rounded-0 my-3">
   <div class="card-header d-flex">
     <h5><span><strong>单个转舍</strong></h5>
@@ -70,8 +66,9 @@
     </div>
     <div class=" form-group col-md-2">
       <label for="changeDay">转舍日期<span id="changeDaywarn" hidden="hidden" class="ml-4 text-danger">*必填</span></label>
-      <input type="date" name="changeDay" id="changeDay" data-label="changeDaywarn" class="form-control" value="<?php echo date("Y-m-d") ?>"  onkeyup="hiddenwarn(this)">
+      <input type="datetime-local" name="changeDay" id="changeDay" data-label="changeDaywarn" class="form-control" value="<?php echo date("Y-m-d") ?>"  onkeyup="hiddenwarn(this)">
     </div>
+    
     <div class=" form-group col-md-2">
       <label for="personinCharge">负责人</label>
       <select name="PIC" id="personinCharge" class="form-control">

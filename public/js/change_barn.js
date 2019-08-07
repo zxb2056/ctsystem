@@ -79,8 +79,10 @@ $(document).ready(function(){
     $("#submit").click(function(){
         var outbarn=$("#leaveBarn").val()
         var enterbarn=$("#enterBarn").val()
+        var pic = $("#personinCharge option:selected").text()
         var reason=$("#reason").val().replace(/(^\s*)|(\s*$)/g, '')
         var changeday=$("#changeDay").val()
+        var changeday = changeday.replace('T',' ')
         if(outbarn==enterbarn){
             alert('转出转入牛舍不能相同')
         return
@@ -88,6 +90,7 @@ $(document).ready(function(){
         if(reason=='' || reason==undefined || reason == null){
             $('#reason')[0].style.border="1px solid red";
             $('#changeReason').removeAttr("hidden")
+            return false;
 
         }else{
             $('#reason')[0].style.border="1px solid #ced4da";
@@ -96,6 +99,7 @@ $(document).ready(function(){
         if(changeday=='' || changeday==undefined || changeday == null){
             $('#changeDay')[0].style.border="1px solid red";
             $('#changeDaywarn').removeAttr("hidden")
+            return false;
 
         }else{
             $('#changeDay')[0].style.border="1px solid #ced4da";
@@ -117,12 +121,21 @@ $(document).ready(function(){
             type:'post',
             url:'/admin/manage/feed/cattle_barn/insertChangeBarn',
             dataType:"json",
-            data:{'leaveBarn':outbarn,'enterBarn':enterbarn,'reason':reason,'cattleID':cattleID,'changeDay':changeday},
+            data:{'leaveBarn':outbarn,'enterBarn':enterbarn,'reason':reason,'cattleID':cattleID,'changeDay':changeday,'PIC':pic},
+            beforeSend:function(){
+                $("#submit").attr("disabled",true)
+            },
             success:function(msg){
-            // alert('done')
             getCattleEarTag();
             $("#inputCattle").val("")
-                },
+             },
+             complete:function(){
+                $("#submit").removeAttr("disabled")
+                $("#leaveBarn").val("")
+                $("#enterBarn").val("")
+                $("#reason").val("")
+                $("#changeDay").val("")
+             }
                
             })
     })

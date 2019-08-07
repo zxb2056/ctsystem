@@ -3,7 +3,7 @@
 @include('admin-layouts.admin-head')
 @stop
 @section('css')
-
+<title>防疫历史查询</title>
 @stop
 
 @section('topnav')
@@ -17,21 +17,53 @@
 @section('content')
 <div class="card rounded-0 my-3">
                 <div class="card-header d-flex">
-                        <div class="mr-auto"><strong>防疫记录</strong></div>
-                     
-                    
+                        <div class="mr-auto"><strong>防疫历史记录</strong></div>                    
                 </div>
-                <div class="card-body table-responsive">
-                     
+                <div class="card-body">
+                <form action="/admin/manage/Veterinary/antiepidemic_history" method="get" class="border p-2">
+                  <div class="form-row">
+                      <div class="form-group col-md-3">
+                          <label for="showitem" >显示条数</label>
+                            <select name="showitem" id="showitem" class="form-control form-control-sm" name="showitem">
+                              <option value="10" @if(!$datas || $datas['showitem']==10) selected @endif>10条</option>
+                              <option value="20" @if($datas[ 'showitem' ]==20) selected @endif>20条</option>
+                              <option value="30" @if($datas[ 'showitem' ]==30) selected @endif>30条</option>
+                              <option value="50" @if($datas[ 'showitem' ]==50) selected @endif>50条</option>
+                            </select>
+                        </div>
+                    <div class="form-group col-md-3">
+                      <label for="cattleID">牛号</label>
+                      <input type="text" class="form-control form-control-sm" id="cattleID" name="cattleID" placeholder="牛号">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="querystartdate">开始日期</label>
+                      <input type="date" id="querystartdate" class="form-control form-control-sm" name="startdate">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="inputPassword4">截止日期</label>
+                      <input type="date" id="querystopdate" class="form-control form-control-sm" name="stopdate">
+                    </div>
 
-                    <div class="mt-4"><h5>防疫历史</h5></div>
-          <table class="table table-hover border">
+                  <div class="form-group col-md-3">
+                    <label for="epidemic_type">疫病名称</label>
+                    <input type="text" class="form-control form-control-sm" id="epidemic_type" name="epidemic_type">
+                  </div> 
+                </div>
+                <button type="submit" class="btn btn-sm btn-outline-primary">提交</button>
+                </form>
+              </div>
+                <div class="card-body table-responsive">
+                  <table class="table table-hover border">
                 <thead>
                         <tr>
                             <th>序号</th>
                             <th>牛号</th>
+                            <th>牛只日龄</th>
                             <th>免疫日期</th>
                             <th>免疫疾病</th>
+                            <th>牛舍号</th>
+                            <th>疫苗名称</th>
+                            <th>疫苗使用量</th>
                             <th>疫苗厂家</th>
                             <th>免疫人员</th>
 
@@ -39,61 +71,29 @@
                         </tr>
                     </thead>
                     <tbody>
+                      @foreach($epidemics_history as $epidemic)
                         <tr>
-                            <td>1</td>
-                            <td>281065</td>
-                            <td>2016-5-23</td>
-                            <td>口蹄疫</td>
-                            <td>金宇保灵</td>
-                            <td>王五</td>
+                            <td>{{(($epidemics_history->currentPage() - 1)* $epidemics_history->perPage()) + $loop->iteration}}</td>
+                            <td>{{$epidemic->linkcattle->cattleID}}</td>
+                            <td>{{$epidemic->ageOfDay}}</td>
+                            <td>{{$epidemic->anti_day}}</td>
+                            <td>{{$epidemic->epidemic_name->name}}</td>
+                            <td>{{$epidemic->barnId}}</td>
+                            <td>{{$epidemic->drug_name->drugName}}</td>
+                            <td>{{$epidemic->use_amount}}</td>
+                            <td>{{$epidemic->drug_name->supplier}}</td>
+                            <td>{{$epidemic->pic}} </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>281065</td>
-                            <td>2016-5-23</td>
-                            <td>口蹄疫</td>
-                            <td>金宇保灵</td>
-                            <td>王五</td>
-
-                            </tr>
-                            <tr>
-                                    <td>2</td>
-                                    <td>281065</td>
-                                    <td>2016-5-23</td>
-                                    <td>口蹄疫</td>
-                                    <td>金宇保灵</td>
-                                    <td>王五</td>
-        
-                                    </tr>
-                                    <tr>
-                                            <td>2</td>
-                                            <td>281065</td>
-                                            <td>2016-5-23</td>
-                                            <td>口蹄疫</td>
-                                            <td>金宇保灵</td>
-                                            <td>王五</td>
-                
-                                            </tr>
+                      @endforeach
+                        
                     </tbody>
 
           </table>
             
                
                   </div>
-              <div class="card-footer">
-                    <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-center">
-                              <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">前一页</a>
-                              </li>
-                              <li class="page-item"><a class="page-link" href="#">1</a></li>
-                              <li class="page-item"><a class="page-link" href="#">2</a></li>
-                              <li class="page-item"><a class="page-link" href="#">3</a></li>
-                              <li class="page-item">
-                                <a class="page-link" href="#">下一页</a>
-                              </li>
-                            </ul>
-                          </nav>
+              <div class="card-footer d-flex justify-content-center">
+                {{$epidemics_history->links()}}
               </div>
                   </div>
             

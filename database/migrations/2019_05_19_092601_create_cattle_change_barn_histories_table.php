@@ -15,7 +15,7 @@ class CreateCattleChangeBarnHistoriesTable extends Migration
     {
         Schema::create('cattle_change_barn_histories', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('changeDay')->comment('转舍日期');
+            $table->string('changeDay')->comment('转舍日期');
             $table->string('cattle_id')->comment('牛号-id');
             $table->string('leaveBarn')->comment('转出牛舍');
             $table->string('enterBarn')->comment('转入牛舍');

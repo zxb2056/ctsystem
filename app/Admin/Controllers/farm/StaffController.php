@@ -15,6 +15,7 @@ use App\Models\Regioncode;
 use App\Models\StaffAttendance;
 use App\imports\StaffAttendanceImport;
 
+
 class StaffController extends Controller
 {
     //
@@ -67,8 +68,7 @@ class StaffController extends Controller
         return redirect()->back();
     }
     public function retriveDepart(Request $request){
-        
-   
+    
         $pid=$request->Pid;
           $lowers=Department::where('Pid','=',$pid)->get();
         // dd($lowers);
@@ -303,6 +303,80 @@ class StaffController extends Controller
             $updatetemp=Tempworker::findOrFail($request->id);
             $updatetemp->update($datas);
             return redirect()->back();
+        }
+        public function map_s_d()
+        {
+            $departments = Department::where('pid','0')->get();
+            return view('admin.manager.yuangong.map_s_d',compact('departments'));
+        }
+        public function stroe_map_s_d(Request $request)
+        {
+            // 验证
+            $this->validate(Request(),[
+                'department-0'=>'required',
+                'staff_id' => 'required',
+               
+            ],[
+                'department-0.required'=>'部门不能为空',
+                'staff_id.required'=>'必须选择一个员工',
+            ]);
+            // dd($request->all());
+            $datas = $request->all();
+            $depart_str='';
+            foreach($datas as $k=>$v){
+                // 正则匹配键名，然后截取-后面的数字
+            if(preg_match('/department-/',$k)){
+                $depart_str .= $v.'-';
+            }
+
+            }
+            $depart_str = rtrim($depart_str, '-'); 
+            // dd($depart_str);
+            // 最后一个-号后的数字是department_id
+            $department_id =trim(strrchr($depart_str, '-'),'-');
+            $staff_id = $request->staff_id;
+            $position = $request->position;
+            $whole_depart_id = $depart_str;
+            $whole_depart_name = '';
+            // 检测数据库中是否有重复数据
+        $ifexist = DB::table('department_staff')->where('staff_id',$staff_id)->where('department_id',$department_id)->first();
+        if(!empty($ifexist)){
+            return redirect()->back()->with('error','部门和员工信息重复,请核对后再输');
+        }
+            // 提取id
+            $pos = strpos($depart_str,'-');
+            if($pos){
+                $ids = explode("-",$depart_str);
+                foreach($ids as $id){
+                    $name = Department::where('id',$id)->first()->departName;
+                    $whole_depart_name .= $name.'>';
+                }
+               
+            }else{
+                $ids = $depart_str;
+                $whole_depart_name = Department::where('id',$ids)->first()->departName;
+            }
+             DB::table('department_staff')->insert(
+                [
+                    'department_id'=> $department_id,
+                    'staff_id' => $staff_id,
+                    'position' =>$position,
+                    'whole_depart_id' => $whole_depart_id,
+                    'whole_depart_name' => rtrim($whole_depart_name,'>'),
+
+                ]
+
+                );
+                return redirect()->back()->with('success','插入员工部门信息成功');
+        }
+        public function get_staff(Request $request)
+        {
+            $name = $request->name;
+            $staff = Staff::where('name','like','%'.$name.'%')->get();
+            echo json_encode(array(
+                'errors' => 0,
+                'staffs' =>$staff,
+            ));
         }
 
 }

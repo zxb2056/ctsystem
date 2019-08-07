@@ -64,7 +64,7 @@ text-decoration: none;
             <a class="nav-link  active" href="{{url('/admin/manage/breed/mateplan')}}">配种计划表</a>
           </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url('/admin/manage/breed/fanzhibaobiao')}}">繁殖报表</a>
+          <a class="nav-link" href="{{ url('/admin/manage/breed/matereport/month')}}">繁殖报表</a>
         </li>
       </ul>
       <ul class="nav nav-tabs bg-light mt-2">

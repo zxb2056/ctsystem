@@ -16,6 +16,7 @@ use App\Models\BreedFanzhiMonthPlan;
 use App\Models\BreedCalv;
 use App\models\BreedAftercare;
 use App\Models\BreedFanzhiMonthReport;
+use App\Models\BreedFanzhiYearlyReport;
 
 class RedisController extends Controller
 {
@@ -1643,20 +1644,20 @@ class RedisController extends Controller
                     // dd($yearreports['notNormalCalvRate']);
                     // 流产率=流产数/全产产犊母牛数
                     $abortions=BreedCalv::whereBetween('calvDate',[$start,$end])->where('calvStatus','=','流产')->count();
-                    $yearreports['aborationRate'] = round($abortions/$calvTotalNum,2);
+                    $yearreports['abortionRate'] = round($abortions/$calvTotalNum,2);
                     // dd( $yearreports['aborationRate']);
                     // 年空怀率,这一指标换成青年牛首配日龄
                     // 平均胎间距
                     $yearreports['AveSpace']=BreedCalv::whereBetween('calvDate',[$start,$end])->avg('calvInterval');
-                    dd($yearreports['AveSpace']);
+                    // dd($yearreports['AveSpace']);
                     // 犊牛死亡率--这个属于新建表,牛只淘汰表,6月以下牛只死亡数/6月龄以下牛只总数--(日期从每年1月1日开始,即出生日期提前6个月的都算.)
+                    $yearreports['deathCalfRate']='稍后计算';
 
-
-
+                    BreedFanzhiYearlyReport::create($yearreports);
             // 产犊间隔，在产犊表里增加clavInterval,当胎次大于等于2的时候，查找上一胎次产犊时间，计算两者相差的天数
             // 流产牛不计算，造成产犊间隔加大，这也提醒养殖场注意防范流产。
             
-            dd('test');
+            return redirect('http://www.baidu.com');
 
         }
         public function digui($cow_id,$pregNum)

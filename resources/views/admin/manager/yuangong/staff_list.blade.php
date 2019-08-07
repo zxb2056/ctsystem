@@ -29,6 +29,9 @@
     <a class="nav-link" href="{{url('/admin/manage/staff/partment')}}">部门管理</a>
   </li>
   <li class="nav-item">
+    <a class="nav-link" href="{{url('/admin/manage/staff/map_s_d')}}">设置员工部门</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link" href="{{url('/admin/manage/staff/tmpworker')}}">临时用工</a>
   </li>
 
@@ -122,7 +125,13 @@
                             <td>{{$staff->gradudate}}</td>
                             <td>{{$staff->special}}</td>
                             <td>{{$staff->Political_status}}</td>
-                            <td>部门是：</td>
+                            <td>
+                                <ul>
+                                @foreach($staff->wholedepartname as $depart)
+                                <li>{{$depart->whole_depart_name}}</li>
+                                @endforeach
+                                </ul>
+                            </td>
                             <td class="d-flex" width="150">
                             <a type="button"  href='' class="btn btn-sm btn-outline-primary p-1 mx-1" data-toggle="modal" data-target="#updateModal" data-id="{{$staff->id}} " data-name="{{$staff->name}}" data-gender="{{ $staff->gender}}" data-telephone="{{ $staff->telephone }}" data-birthday ="{{ $staff->birthday }}" data-entrydate="{{ $staff->entryDate }}" data-edudegree="{{ $staff->eduDegree }}" data-school="{{ $staff->school }}" data-major="{{ $staff->major }}" data-gradudate="{{ $staff->gradudate }}" data-special="{{ $staff->special }}" data-political_status="{{$staff->Political_status }}">编辑</a>
                             <a type="button" href='' class="btn btn-sm btn-outline-primary mx-1 p-1">删除</a>

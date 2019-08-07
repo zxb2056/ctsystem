@@ -250,7 +250,7 @@ class PostController extends Controller
                 
                 return ;
                     }
-                }
+        }
     //公告板列表 
     public function bulletinlist(){
         $bulletins=Bulletin::orderBy('id','desc')->paginate(10);

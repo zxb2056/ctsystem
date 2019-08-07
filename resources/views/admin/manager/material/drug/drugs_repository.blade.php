@@ -3,7 +3,7 @@
 @include('admin-layouts.admin-head')
 @stop
 @section('css')
-
+<title>药品库查看</title>
 @stop
 
 @section('topnav')
@@ -15,72 +15,95 @@
 @stop
 
 @section('content')
+<ul class="nav nav-tabs bg-light">
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/material/drugs/repository/plus')}}">药品信息登记</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url('/admin/manage/material/drugs/input')}}">药品入库登记</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{{url('/admin/manage/material/drugs/output')}}">药品出库登记</a>
+        </li>
+        <li class="nav-item">
+                <a class="nav-link" href="{{url('/admin/manage/material/drugs/ledger/store')}}">药品台帐</a>
+        </li>
+        <li class="nav-item">
+                <a class="nav-link" href="{{url('/admin/manage/material/drugs/remain')}}">药品库存</a>
+        </li>
+        <li class="nav-item">
+                <a class="nav-link  active" href="{{url('/admin/manage/material/drugs/repository')}}">药品名录</a>
+        </li>
+</ul>
 <div class="card rounded-0 my-3">
                 <div class="card-header d-flex">
-                    <div class="mr-auto"><strong>药品库</strong></div>
-                    <div><button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#diseaseModal">增加</button></div>
+                <div class="mr-auto"><strong>药品库</strong><small>--共有{{$repos->total()}}个药品</small></div>
+                    <div><a type="button" class="btn btn-sm" href="/admin/manage/material/drugs/repository/plus">增加</a></div>
 
                 </div>
                 <div class="card-body table-responsive">
 
-                    <table class="table table-hover border">
+                    <table class="table table-hover table-sm border">
                         <thead>
                             <tr>
-                                <th>id</th>
+                                <th>序号</th>
                                 <th>药品名称</th>
                                 <th>药品类别</th>
                                 <th>计量单位</th>
-                                <th>供货单位</th>
+                                <th>包装规格</th>
+                                <th>供货公司</th>
+                                <th>主要成分</th>
+                                <th>性状</th>
+                                <th>药理作用</th>
+                                <th>药动学</th>
+                                <th>适应症</th>
+                                <th>用法用量</th>
+                                <th>不良反应</th>
+                                <th>注意事项</th>
+                                <th>休药期</th>
+                                <th>有效成分含量</th>
+                                <th>贮藏方法</th>
+                                <th>批准文号</th>
+                                <th>备注说明</th>
                                 <th>操作</th>
-
-
-
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($repos as $repo)
                             <tr>
-                                <td>1</td>
-                                <td>头孢噻呋</td>
-                                <td>治疗药品</td>
-                                <td>ml</td>
-                                <td>山东齐鲁药业</td>
+                                <td>{{(($repos->currentPage()-1)*$repos->perPage()) + $loop->iteration }}</td>
+                            <td><a href="/admin/manage/material/drugs/repo/detail/{{$repo->id}}">{{str_limit($repo->drugName,20,'...')}}</a></td>
+                                <td>{{str_limit($repo->drugType,10,'...')}}</td>
+                                <td>{{str_limit($repo->unit,10,'...')}}</td>
+                                <td>{{str_limit($repo->pack_size,10,'...')}}</td>
+                                <td>{{str_limit($repo->supplier,10,'...')}}</td>
+                                <td>{{str_limit($repo->main_components,10,'...')}}</td>
+                                <td>{{str_limit($repo->character,10,'...')}}</td>
+                                <td>{{str_limit($repo->yaolizuoyong,10,'...')}}</td>
+                                <td>{{str_limit($repo->yao_dong_xue,10,'...')}}</td>
+                                <td>{{str_limit($repo->suit_symptom,10,'...')}}</td>
+                                <td>{{str_limit($repo->usage_dosage,10,'...')}}</td>
+                                <td>{{str_limit($repo->adverse_reaction,10,'...')}}</td>
+                                <td>{{str_limit($repo->attention,10,'...') }}</td>
+                                <td>{{str_limit($repo->withdrawal_time,10,'...')}}</td>
+                                <td>{{str_limit($repo->active_ingredient_content,10,'...')}}</td>
+                                <td>{{str_limit($repo->storage_method,10,'...')}}</td>
+                                <td>批准文号</td>
+                                <td>{{str_limit($repo->note,10,'...')}}</td>
                                 <td><button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
                                         data-id="1" data-target="#diseaseModal">编辑</button></td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>过氧乙酸</td>
-                                <td>消毒剂</td>
-                                <td>L</td>
-                                <td>河南金正大有限公司</td>
-                                <td><button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                                        data-id="1" data-target="#diseaseModal">编辑</button></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>BVDV疫苗</td>
-                                <td>疫苗</td>
-                                <td>ml</td>
-                                <td>内蒙古金宇保灵</td>
-                                <td><button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                                        data-id="1" data-target="#diseaseModal">编辑</button></td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>布病检测卡</td>
-                                <td>检疫药剂</td>
-                                <td>个</td>
-                                <td>内蒙古金宇保灵</td>
-                                <td><button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                                        data-id="1" data-target="#diseaseModal">编辑</button></td>
-                            </tr>
+                            @endforeach
+                            
                         </tbody>
 
                     </table>
 
 
                 </div>
-
+                <div class="card-footer d-flex justify-content-center">
+                    {{$repos->links()}}
+                </div>
             </div>
 
         </div>

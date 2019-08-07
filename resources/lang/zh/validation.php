@@ -120,6 +120,7 @@ return [
    // 'age'         => '年龄',
    'cattleID' =>'牛号',
    'cattleName'=>'牛号',
+   'contacter'=>'联系人',
 ],
 
 ];

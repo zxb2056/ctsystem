@@ -17,6 +17,8 @@ use App\Models\BreedAftercare;
 use App\Models\BreedDisease;
 use App\Models\BreedFanzhiMonthPlan;
 use App\Models\BreedFanzhiYearlyPlan;
+use App\Models\BreedFanzhiMonthReport;
+use App\Models\BreedFanzhiYearlyReport;
 
 class BreedController extends Controller
 {
@@ -122,8 +124,35 @@ class BreedController extends Controller
         ->paginate($request->input('showitem',10));
         return view('admin.manager.breed.expected_birth',compact('expectedCattle','datas'));
     }
-    public function fanzhibaobiao(){
-        return view('admin.manager.breed.fanzhibaobiao');
+    public function month_report(Request $request){
+        $datas=array();
+        $datas['year']=$request->input('year');
+        $datas['month']=$request->input('month');
+        $years=BreedFanzhiMonthReport::orderBy('id','desc')->get(['year','month']);
+        $grouped= $years->groupby('year');
+        $grouped->toArray();
+        // dd($grouped);
+        if(empty($datas['year']) || empty($datas['month'])){
+            $reports=BreedFanzhiMonthReport::orderBy('id','desc')->first();
+       }
+       else{
+           $reports=BreedFanzhiMonthReport::where('year',$datas['year'])->where('month',$datas['month'])->first();
+       }
+        return view('admin.manager.breed.fanzhibaobiao',compact('grouped','reports'));
+    }
+    public function yearly_report(Request $request){
+        $datas=array();
+        $datas['year']=$request->input('year');
+        $years=BreedFanzhiYearlyReport::orderBy('id','desc')->get(['year']);
+        $grouped= $years->groupby('year');
+        $grouped->toArray();
+        if(empty($datas['year'])){
+            $reports=BreedFanzhiYearlyReport::orderBy('id','desc')->first();
+       }
+       else{
+           $reports=BreedFanzhiYearlyReport::where('year',$datas['year'])->first();
+       }
+        return view('admin.manager.breed.breed_report_yearly',compact('grouped','reports'));
     }
     public function mateRecordStore(Request $request){
         $datas=array();

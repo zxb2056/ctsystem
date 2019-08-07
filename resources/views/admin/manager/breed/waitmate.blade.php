@@ -41,7 +41,7 @@
           <a class="nav-link" href="{{url('/admin/manage/breed/mateplan')}}">配种计划表</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url('/admin/manage/breed/fanzhibaobiao')}}">繁殖报表</a>
+          <a class="nav-link" href="{{ url('/admin/manage/breed/matereport/month')}}">繁殖报表</a>
         </li>
       </ul>
 <div class="card rounded-0 my-3">

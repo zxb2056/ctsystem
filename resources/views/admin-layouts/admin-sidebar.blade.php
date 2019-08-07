@@ -94,7 +94,7 @@
                                     <a href="{{asset('/admin/manage/breed/mateplan')}}">配种计划表</a>
                                 </li>
                                 <li>
-                                    <a href="{{asset('/admin/manage/breed/fanzhibaobiao')}}">繁殖报表</a>
+                                    <a href="{{asset('/admin/manage/breed/matereport/month')}}">繁殖报表</a>
                                 </li>
                             </ul>
                         </li>
@@ -146,83 +146,131 @@
                         </li>
                        
                         <li>
-                            <a href="#manage" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">生产管理</a>
+                            <a href="#manage" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">生产管理登记</a>
                             <ul class="collapse list-unstyled bg-ulcolor" id="manage">
                                 <li>
-                                    <a href="{{asset('/admin/manage/feed/dieOut')}}">单个淘汰登记</a>
+                                    <a href="{{asset('/admin/manage/feed/dieOut')}}">淘汰登记</a>
                                 </li>
                                 <li>
-                                    <a href="{{asset('/admin/manage/feed/sell_batch')}}">批量出售登记</a>
+                                    <a href="{{asset('/admin/manage/feed/sell_batch')}}">销售登记</a>
                                 </li>
                                 <li>
-                                    <a href="{{asset('/admin/manage/feed/sell')}}">离场记录查询</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/feed/change_barn')}}">牛只转舍登记</a>
+                                    <a href="{{asset('/admin/manage/feed/change_barn')}}">转舍登记</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
+                                <a href="#productLookOver" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">生产管理数据查阅</a>
+                                <ul class="collapse list-unstyled bg-ulcolor" id="productLookOver">
+
+                                    <li>
+                                        <a href="{{asset('/admin/manage/feed/eliminate_ledger')}}">淘汰记录查询</a>
+                                    </li>
+                                    <li>
+                                            <a href="{{asset('/admin/manage/feed/sell_ledger')}}">销售记录查询</a>
+                                    </li>
+                                    <li>
+                                            <a href="{{asset('/admin/manage/feed/change_barn_history')}}">转舍历史查询</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                        <li>
+                        <li>
+                                <a href="#supplier_manage" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">供货商管理</a>
+                                <ul class="collapse list-unstyled bg-ulcolor" id="supplier_manage">
+
+                                    <li>
+                                        <a href="{{asset('/admin/manage/supplier/plus')}}">新增</a>
+                                    </li>
+                                    <li>
+                                            <a href="{{asset('/admin/manage/supplier/contacter/plus')}}">添加联系人</a>
+                                    </li>
+                                    <li>
+                                            <a href="{{asset('/admin/manage/supplier/info')}}">查看</a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                        <li>
                             <a href="#wuzi" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">物资管理</a>
                             <ul class="collapse list-unstyled bg-ulcolor" id="wuzi">
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/feed_input')}}">饲料入库登记</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/feed_output')}}">饲料出库登记</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/feed_ledger')}}">饲料台账</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/feed_remain')}}">饲料库存</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/feed_repository')}}">饲料名录</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/drugs_input')}}">药品入库登记</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/drugs_output')}}">药品出库登记</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/drugs_ledger')}}">药品台账</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/drugs_remain')}}">药品库存</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/drugs_repository')}}">药品名录</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/instru_consum_input')}}">器械耗材入库登记</a>
-                                </li>
-                                
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/instru_consum_output')}}">器械耗材出库使用登记</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/instru_consum_check')}}">器械耗材盘点登记</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/instru_consum_ledger')}}">器械耗材台账</a>
-                                </li>
-                                <li>
-                                    <a href="{{asset('/admin/manage/material/instru_consum_remain')}}">器械耗材库存</a>
-                                </li>
-                                <li>
-                                        <a href="{{asset('/admin/manage/material/semen_input')}}">冻精入库登记</a>
-                                </li>
-                                    <li>
-                                            <a href="{{asset('/admin/manage/material/semen_output')}}">冻精出库登记</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{asset('/admin/manage/material/semen/store_ledger')}}">冻精台账</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{asset('/admin/manage/material/semen_remain')}}">冻精库存</a>
-                                    </li>
+                                <a href="#feed" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle bg-dark border-top">饲料</a>
+                                <ul class="collapse list-unstyled bg-ulcolor" id="feed">
+                                        <li>
+                                                <a href="{{asset('/admin/manage/material/feed_input')}}">饲料入库登记</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/feed_output')}}">饲料出库登记</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/feed_ledger')}}">饲料台账</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/feed_remain')}}">饲料库存</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/feed_repository')}}">饲料名录</a>
+                                            </li>
+                                </ul>
+                                <a href="#drug" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle bg-dark border-top">药品</a>
+                                <ul class="collapse list-unstyled bg-ulcolor" id="drug">
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/drugs/repository/plus')}}">新药品信息登记</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/drugs/input')}}">药品入库登记</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/drugs/output')}}">药品出库登记</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/drugs/ledger/store')}}">药品台账</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/drugs/remain')}}">药品库存</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/drugs/repository')}}">药品名录</a>
+                                            </li>
+                                </ul>
+                                <a href="#instru" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle bg-dark border-top">器械耗材</a>
+                                <ul class="collapse list-unstyled bg-ulcolor" id="instru">
+                                        <li>
+                                                <a href="{{asset('/admin/manage/material/instru_consum_input')}}">器械耗材入库登记</a>
+                                            </li>
+                                            
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/instru_consum_output')}}">器械耗材出库使用登记</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/instru_consum_check')}}">器械耗材盘点登记</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/instru_consum_ledger')}}">器械耗材台账</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/instru_consum_remain')}}">器械耗材库存</a>
+                                            </li>
+                                </ul>
+                                <a href="#semen" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle bg-dark border-top">冻精</a>
+                                <ul class="collapse list-unstyled bg-ulcolor" id="semen">
+                                        <li>
+                                                <a href="{{asset('/admin/manage/material/semen_input')}}">冻精入库登记</a>
+                                        </li>
+                                            <li>
+                                                    <a href="{{asset('/admin/manage/material/semen_output')}}">冻精出库登记</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/semen/store_ledger')}}">冻精台账</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{asset('/admin/manage/material/semen_remain')}}">冻精库存</a>
+                                            </li>
+                                </ul>
+                               
                             </ul>
                         </li>
                         <li>
@@ -240,6 +288,9 @@
                                 </li>
                                 <li>
                                     <a href="{{asset('/admin/manage/staff/partment')}}">部门管理</a>
+                                </li>
+                                <li>
+                                    <a href="{{asset('/admin/manage/staff/map_s_d')}}">部门VS员工</a>
                                 </li>
                                 <li>
                                     <a href="{{asset('/admin/manage/staff/tmpworker')}}">临时用工</a>

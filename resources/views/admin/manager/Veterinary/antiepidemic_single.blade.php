@@ -3,7 +3,8 @@
 @include('admin-layouts.admin-head')
 @stop
 @section('css')
-
+<title>单头防疫</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
 @section('topnav')
@@ -15,74 +16,109 @@
 @stop
 
 @section('content')
+@if(session('success'))
+<div class="alert alert-success autohidereturn mt-1">
+    {{session('success')}}
+</div>
+@endif
+@if(session('danger'))
+<div class="alert alert-danger autohidereturn mt-1">
+    {{session('danger')}}
+</div>
+@endif
+@if(session('error'))
+<div class="alert alert-danger autohidereturn mt-1">
+    {{session('error')}}
+</div>
+@endif
 <div class="card rounded-0 my-3">
+    @if ($errors->any())
+    <div class="alert alert-danger autohidereturn">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+  @endif
                 <div class="card-header d-flex">
-                        <div class="mr-auto"><strong>防疫记录</strong></div>
-                       
-                    
+                        <div class="mr-auto"><strong>新增单条防疫记录</strong></div>
                 </div>
-                <div class="card-body table-responsive">
-                 
-                    <div><h5>新增单条防疫记录</h5></div>
-                    <form action="#">
+                <div class="card-body">
+                  <form action="/admin/manage/Veterinary/antiepidemic/store" method="post">
+                    {{csrf_field()}}
                         <div class="form-group row">
-                            <label for="niushehao" class="col-sm-2 col-form-label col-form-label-sm">牛号</label>
+                            <label for="cattleID" class="col-sm-2 col-form-label col-form-label-sm">牛号</label>
                             <div class="col-sm-10">
-                              <input type="number" class="form-control form-control-sm" id="niushehao" name="niushehao" >
+                              <input type="text" class="form-control form-control-sm" id="cattleID" name="cattleID">
+                              <div class="check-feedback text-danger" hidden> </div>
                             </div>
                           </div>
                           <div class="form-group row">
-                              <label for="jiBing" class="col-sm-2 col-form-label">免疫疾病</label>
-                              <div class="col-sm-10">
-                                      <select class="custom-select" required>
-                                              <option value="">选择疫病种类</option>
-                                              <option value="1">口蹄疫免疫</option>
-                                              <option value="2">布氏杆菌</option>
-                                              <option value="3">病毒性腹泻-BVDV</option>
-                                              <option value="4">传染性鼻气管炎-IBR</option>
-                                              <option value="5">魏氏梭菌病</option>
-                                              <option value="6">牛出血性败血症</option>
-                                              <option value="7">炭疽</option>
-                                              <option value="8">牛流行热</option>
-                                              <option value="9">巴氏杆菌</option>
-                                          
-                                            </select>
+                            <label for="epidemic_type" class="col-md-2 col-form-label">免疫疾病</label>
+                            <div class="col-md-7">
+                              <select class="custom-select" id="epidemic_type" name="epidemic_type" required>
+                                <option value="">选择疫病种类</option>
+                                @foreach($epidemics as $epi)
+                                <option value="{{$epi->id}}">{{$epi->name}}</option>
+                                @endforeach
+                    
+                              </select>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#plusEpidemicModal"> 添加疫病</button>
+                          </div>
+                          <div class="form-group row">
+                            <label for="anti_day" class="col-sm-2 col-form-label">免疫日期</label>
+                            <div class="col-sm-10">
+                              <input type="date" class="form-control" id="anti_day"  name="anti_day">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="drugName" class="col-md-2 col-form-label">药品名称</label>
+                            <div class="col-md-6">
+                              <input type="hidden" id="drug_id" name="drug_id">
+                              <input type="text" class="form-control" id="drug_name" required>
+                              <select name="" id="drug_info" class="form-control mt-1" multiple="multiple" size="5" style="display: none">
+                                <option value="">返回的药品信息</option>
+                              </select>
+                            </div>
+                            <div class="col-md-3"><span class="mr-1">不存在？</span>
+                              <a class="btn btn-sm btn-link" href="/admin/manage/material/drugs/repository/plus">新增</a>
+                            </div>
+                          </div>
+                    
+                          <div class="form-group row">
+                            <label for="drugType" class="col-md-2 col-form-label">药品类别</label>
+                            <div class="col-md-10">
+                              <input type="text" class="form-control" id="drugType" name="drugType" disabled>
+                            </div>
+                          </div>
+                    
+                          <div class="form-group row">
+                            <label for="Supplier" class="col-md-2 col-form-label">供货单位</label>
+                            <div class="col-md-10">
+                              <input type="hidden" id="supplier_id" name="supplier_id">
+                              <input type="text" class="form-control" id="Supplier" disabled>
+                            </div>
+                          </div>
+                          <div class="form-group row ">
+                            <label for="use_amount" class="col-md-2 col-form-label">用药量（ml/头)</label>
+                            <div class="col-md-10 input-group">
+                              <input type="text" class="form-control" id="use_amount" name="use_amount" required>
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-light"><span id="unit">/</span></div>
                               </div>
                             </div>
-                          <div class="form-group row">
-                            <label for="date" class="col-sm-2 col-form-label">免疫日期</label>
-                            <div class="col-sm-10">
-                              <input type="date" class="form-control" id="date"  name="matedate">
-                            </div>
                           </div>
                           <div class="form-group row">
-                            <label for="DrugName" class="col-sm-2 col-form-label">药品名称</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" id="DrugName"  name="DrugName">
+                            <label for="pic" class="col-md-2 col-form-label">操作人员</label>
+                            <div class="col-md-10">
+                              <input type="text" class="form-control" id="pic" name="pic">
                             </div>
                           </div>
-                          <div class="form-group row">
-                            <label for="manufacturers" class="col-sm-2 col-form-label">药品厂家</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" id="manufacturers"  name="manufacturers">
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                                <label for="dosage" class="col-sm-2 col-form-label">用药量（ml)</label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="dosage"  name="dosage">
-                                </div>
-                              </div>
-                              <div class="form-group row">
-                                    <label for="Operator" class="col-sm-2 col-form-label">操作人员</label>
-                                    <div class="col-sm-10">
-                                      <input type="text" class="form-control" id="Operator"  name="Operator">
-                                    </div>
-                                  </div>
                           <div class="d-flex justify-content-center">
                             <button class="btn btn-outline-success justify-content-end" type="submit">提交</button>
                           </div>
-                         
                     </form>
 
           
@@ -92,7 +128,34 @@
                   </div>
             
         </div>
-
+<!-- Modal -->
+<div class="modal fade" id="plusEpidemicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="plusEpidemicModalLabel">添加疫病</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/admin/manage/Veterinary/epidemic/plus_type" method="get">
+        <div class="modal-body">
+                <div class="form-group row">
+                  <label for="name" class="col-sm-3 col-form-label">疫病名称</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="name"  name="name" >
+                  </div>
+                </div>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
 @stop
 
 @section('footer')
@@ -100,5 +163,17 @@
 @stop
 
 @section('js')
-
+<script>
+$(document).ready(function(){
+    $("#cattleID").keyup(
+      delay(function (e) {
+      var cattleID = this.value
+      checkCattle(cattleID)
+  }, 1000)
+ )
+})
+</script>
+<script src="/js/check_cattle.js"></script>
+<script src="/js/get_drug.js"></script>
+<script src="/js/autohideerror.js"></script>
 @stop

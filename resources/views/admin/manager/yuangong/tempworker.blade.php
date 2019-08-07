@@ -29,6 +29,9 @@
     <a class="nav-link" href="{{url('/admin/manage/staff/partment')}}">部门管理</a>
   </li>
   <li class="nav-item">
+    <a class="nav-link" href="{{url('/admin/manage/staff/map_s_d')}}">设置员工部门</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link active" href="{{url('/admin/manage/staff/tmpworker')}}">临时用工</a>
   </li>
 
