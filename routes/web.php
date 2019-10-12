@@ -241,6 +241,9 @@ Route::post('/manage/Veterinary/Quarantine_store','\App\Admin\Controllers\farm\V
 Route::get('/manage/Veterinary/trim_hoof_input','\App\Admin\Controllers\farm\VeterController@trim_hoof_input');
 Route::get('/manage/Veterinary/trim_hoof_history','\App\Admin\Controllers\farm\VeterController@trim_hoof_history');
 Route::post('/manage/Veterinary/trim_hoof/store','\App\Admin\Controllers\farm\VeterController@trim_hoof_store');
+Route::get('/manage/Veterinary/trim_hoof/detail/{id}','\App\Admin\Controllers\farm\VeterController@trim_hoof_detail');
+Route::get('/manage/Veterinary/trim_hoof/drug_use/{treat_id}','\App\Admin\Controllers\farm\VeterController@trim_drug_use');
+
 
 Route::get('/manage/Veterinary/repellent_single','\App\Admin\Controllers\farm\VeterController@repellent_single');
 Route::get('/manage/Veterinary/repellent_batch','\App\Admin\Controllers\farm\VeterController@repellent_batch');

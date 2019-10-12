@@ -12,7 +12,7 @@ $("#drug_name").keyup(delay(function(){
             $("#drug_stored_id").find("option").not(":first").remove()
 
     get_drug(name,store)
-},300))
+},100))
 $("#drug_info").change(function(){
   var drug_name = $("#drug_info option:selected").text()
   var drug_id = $("#drug_info option:selected").val()

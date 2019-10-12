@@ -8,11 +8,11 @@ $("#cattleID").off("paste").on("paste",delay(function(e){
         checkCattle(paste)
     },1000));
 $("#status2").click(function(){
-$("#treatmentResult").removeAttr('hidden')
+$("#LF_result").removeAttr('hidden')
 $("#dailyResult").attr("hidden",true)
 })
 $("#status1").click(function(){
-$("#treatmentResult").attr("hidden",true)
+$("#LF_result").attr("hidden",true)
 $("#dailyResult").removeAttr("hidden")
 
 })
@@ -82,7 +82,7 @@ $("body").on('keyup','.get_drug_info',delay(function(e)
         }
       )
     }
-},800)
+},300)
 )
 var d_id =''
 $("body").on('click','#return_drug_info',function(){

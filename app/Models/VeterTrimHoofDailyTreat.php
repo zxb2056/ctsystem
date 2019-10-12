@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class VeterTrimHoofDailyTreat extends Model
 {
     //
+    protected $guarded=['id'];
 }

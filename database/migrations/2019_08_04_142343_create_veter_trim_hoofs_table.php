@@ -22,6 +22,8 @@ class CreateVeterTrimHoofsTable extends Migration
             $table->string('trim_num')->nullable()->comment('修蹄数量');
             $table->string('which_hoof')->nullable()->comment('以1代表左前，2代表右前，3代表左后，4代表右后，中间以逗号隔开');
             $table->string('pic')->nullable()->comment('责任兽医');
+            $table->date('end_day')->nullable()->comment('牛蹄修好的日期，可能是当天');
+            $table->string('outcome')->nullable()->comment('治疗结果');
             $table->timestamps();
         });
     }

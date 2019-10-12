@@ -15,6 +15,9 @@ use App\Models\CattleBarnMapIndividual;
 use App\Models\VeterAntiepidemic;
 use DB;
 use App\Models\VeterQuarantine;
+use App\Models\VeterTrimHoof;
+use App\Models\VeterTrimHoofDailyTreat;
+use App\Models\VeterTrimHoofDailyDrugUse;
 
 class VeterController extends Controller
 {
@@ -74,8 +77,9 @@ class VeterController extends Controller
         // 插入治疗药物表
 
         // 把drugid，由字符串转为数组，同时储存药名drug_use，按顺序对应
-        $drug_id = rtrim(",", $request->drug_id);
-        $this->daily_drug_use($drug_id,$day_treat->id,$i=0,$request);
+        $drug_id = $request->drug_id;
+        $model = 'VeterDailyDrugUse';
+        $this->daily_drug_use($drug_id,$day_treat->id,$request,$model);
         return redirect()->back()->with('success','诊疗信息保存成功');
 
   
@@ -121,8 +125,9 @@ class VeterController extends Controller
         //  储存到每日药品表
         $daily_drug = array();
         $daily_drug['daily_treat_id'] = $new_day_treat->id;
-        $drug_id = rtrim(",", $request->drug_id);
-        $this->daily_drug_use($drug_id,$new_day_treat->id,$i=0,$request);
+        $drug_id = $request->drug_id;
+        $model = 'VeterDailyDrugUse';
+        $this->daily_drug_use($drug_id,$new_day_treat->id,$request,$model);
         // 返回前端，提示信息保存成功
         return redirect()->back()->with('success','诊疗信息保存成功');
     }
@@ -352,15 +357,223 @@ class VeterController extends Controller
     public function trim_hoof_input(){
         return view('admin.manager.Veterinary.trim_hoof_input');
     }
-    public function trim_hoof_history(){
-        return view('admin.manager.Veterinary.trim_hoof_history');
+    public function trim_hoof_history(Request $request){
+        $trims = VeterTrimHoof::orderBy('id','desc')->paginate(10);
+        return view('admin.manager.Veterinary.trim_hoof_history',compact('trims'));
+    }
+    public function trim_hoof_detail($id){
+        $trims = VeterTrimHoof::where('id',$id)->first();
+        $details = VeterTrimHoofDailyTreat::where('veter_trim_id',$id)->orderby('which_hoof','asc')->get();
+        return view('admin.manager.Veterinary.trim_hoof_detail',compact('trims','details'));
+        // 还有用药怎么显示？
+        // 决定在新打开页面，以诊疗卡片形式显示
+    }
+    public function trim_drug_use()
+    {
+        dd('以卡片形式展示');
     }
     public function trim_hoof_store(Request $request)
     {
-        dd($request->all());
+        $if_exist = VeterTrimHoof::where('cattleID',$request->cattleID)->where('trim_date',$request->trim_day)->first();
+        if(!empty($if_exist)){
+            return redirect()->back()->with('warn','牛号'.$request->cattleID.'在当前日期'.$request->trim_day.'已经有记录，请核对');
+        }
+        
         //第一种情况，普修，需要把普修之后的所有input设置为disabled,即不往后台传数据。
         // 同时后台，不直接使用create,而是采用数据赋值，以面对js失效的时候，后续数据传过来。
-        
+        if($request->diseaseOrCare == '0'){
+            // dd('普修');首先验证当天日期该牛号是否已经有记录，有则提醒已经存在。
+            // 建立数组
+            $puxiu = array();
+            $cattle = Cattle::where('cattleID','=',$request->cattleID)->first();
+            if(empty($cattle)){
+                return redirect()->back()->with('warn','牛号不存在，请核对是否已经不在群');
+            }
+            $puxiu['cattle_id'] = $cattle->id;
+            $puxiu['cattleID'] = $request->cattleID;
+            $puxiu['trim_date'] = $request->trim_day;
+            $puxiu['diseaseOrCare'] = $request->diseaseOrCare;
+            $puxiu['trim_num'] = count($request->hoof);
+            $puxiu['which_hoof'] = implode(",",$request->hoof);
+            $puxiu['pic'] = $request->pic;
+            $puxiu['end_day'] = $request->trim_day;
+            $puxiu['outcome'] = '普修';
+            VeterTrimHoof::create($puxiu);
+            return redirect()->back()->with('success','修蹄信息保存成功');
+        }
+        if($request->diseaseOrCare == '1'){
+            //    先判断药品用量是否为空，避免插入日数据
+            if(!empty($request->drug_id)){
+                foreach($request->dosage as $dosage){
+                    if(empty($dosage)){
+                        return redirect()->back()->with('error','有药品用量为空，请重新提交');
+                    }
+                }
+            }
+            if(!empty($request->RF_drug_id)){
+                foreach($request->RF_dosage as $dosage){
+                    if(empty($dosage)){
+                        return redirect()->back()->with('error','有药品用量为空，请重新提交');
+                    }
+                }
+            }
+            $BT = array();
+            $cattle = Cattle::where('cattleID','=',$request->cattleID)->first();
+            if(empty($cattle)){
+                return redirect()->back()->with('warn','牛号不存在，请核对是否已经不在群');
+            }
+            $BT['cattle_id'] = $cattle->id;
+            $BT['cattleID'] = $request->cattleID;
+            $BT['trim_date'] = $request->trim_day;
+            $BT['diseaseOrCare'] = $request->diseaseOrCare;
+            $BT['trim_num'] = count($request->hoof);
+            $BT['which_hoof'] = implode(",",$request->hoof);
+            $BT['pic'] = $request->pic;
+            // 结束日期要看当天是否已经治疗完毕
+            // 结果，如当天治疗完毕，写上治疗结果;如果当天没有结束，先空着，等结束了再写。
+            // 因为可能有几个蹄一块修，没有办法出个总的结果，所以普修的时候，结果是普修。有病蹄的情况，具体看日治疗情况，分为ing，done.
+                $BT['end_day'] = null;
+                $BT['outcome'] = '普修的是';
+                foreach($request->hoof as $hoof){
+                    if($hoof == '1' && $request->LF_diseaseOrCare == '0'){
+                        $BT['outcome'] .= '1,'; 
+                    }
+                    if($hoof == '2' && $request->RF_diseaseOrCare == '0'){
+                        $BT['outcome'] .= '2,'; 
+                    }
+                    if($hoof == '3' && $request->LB_diseaseOrCare == '0'){
+                        $BT['outcome'] .= '3,'; 
+                    }
+                    if($hoof == '4' && $request->RB_diseaseOrCare == '0'){
+                        $BT['outcome'] .= '4,'; 
+                    }
+                }                
+            $trims = VeterTrimHoof::create($BT);
+            // 新数组，病蹄情况插入当天治疗表; 根据修蹄$request->hoof数组，判定
+            // daily_表需要日期字段，需要当日治疗结果，是好转还是恶化。
+            foreach($request->hoof as $hoof){
+                
+                // 判断当前蹄子是否是病蹄
+                if($hoof == '1' && $request->LF_diseaseOrCare == '1'){
+                
+                    $BT_daily = array();
+                    $BT_daily['veter_trim_id'] = $trims->id;
+                    $BT_daily['which_hoof'] = $hoof;
+                    $BT_daily['trim_date'] = $request->trim_day;
+                    $BT_daily['status'] = $request->LF_status;
+                    if($BT_daily['status'] =='done'){
+                        $BT_daily['dailycondition'] = '';
+                        $BT_daily['outcome'] =$request->outcome;
+                    }else{
+                        $BT_daily['dailycondition'] =$request->dailycondition;
+                        $BT_daily['outcome'] = '';
+                    }
+                    $BT_daily['disease_name'] = $request->LF_diseasename;
+                    $BT_daily['symptom'] = $request->LF_diseaseCondition;
+                    $BT_daily['therapeuticWay'] = implode(",",$request->therapeuticway);
+                    $BT_daily['note'] = $request->LF_note; 
+                    
+                    $LF_daily_treat= VeterTrimHoofDailyTreat::create($BT_daily);
+                    // 如果治疗方式包括药物治疗或输液疗法
+                    if(!empty($request->drug_id)){                      
+                        $model = 'App\Models\VeterTrimHoofDailyDrugUse';
+                        $drug_id = $request->drug_id;
+                        $daily_treat_id = $LF_daily_treat->id;
+                        $request['drugUse'] = $request->drugUse;
+                        $request['dosage'] = $request->dosage;
+                        $this->daily_drug_use($drug_id,$daily_treat_id,$request,$model);
+                    }
+                }
+                if($hoof == '2' && $request->RF_diseaseOrCare == '1'){
+                    $BT_daily = array();
+                    $BT_daily['veter_trim_id'] = $trims->id;
+                    $BT_daily['which_hoof'] = $hoof;
+                    $BT_daily['trim_date'] = $request->trim_day;
+                    $BT_daily['status'] = $request->RF_status;
+                    if($BT_daily['status'] =='done'){
+                        $BT_daily['dailycondition'] = '';
+                        $BT_daily['outcome'] =$request->RF_outcome;
+                    }else{
+                        $BT_daily['dailycondition'] =$request->RF_dailycondition;
+                        $BT_daily['outcome'] = '';
+                    }
+                    $BT_daily['disease_name'] = $request->RF_diseasename;
+                    $BT_daily['symptom'] = $request->RF_diseaseCondition;
+                    $BT_daily['therapeuticWay'] = implode(",",$request->RF_therapeuticway);
+                    $BT_daily['note'] = $request->RF_note; 
+                    $RF_daily_treat= VeterTrimHoofDailyTreat::create($BT_daily);
+                    // 如果治疗方式包括药物治疗或输液疗法
+                    if(!empty($request->RF_drug_id)){                      
+                        $model = 'App\Models\VeterTrimHoofDailyDrugUse';
+                        $drug_id = $request->RF_drug_id;
+                        $daily_treat_id = $RF_daily_treat->id;
+                        $request['drugUse'] = $request->RF_drugUse;
+                        $request['dosage'] = $request->RF_dosage;
+                        $this->daily_drug_use($drug_id,$daily_treat_id,$request,$model);
+                    }
+                }
+                if($hoof == '3' && $request->LB_diseaseOrCare == '1'){
+                    $BT_daily = array();
+                    $BT_daily['veter_trim_id'] = $trims->id;
+                    $BT_daily['which_hoof'] = $hoof;
+                    $BT_daily['trim_date'] = $request->trim_day;
+                    $BT_daily['status'] = $request->LB_status;
+                    if($BT_daily['status'] =='done'){
+                        $BT_daily['dailycondition'] = '';
+                        $BT_daily['outcome'] =$request->LB_outcome;
+                    }else{
+                        $BT_daily['dailycondition'] =$request->LB_dailycondition;
+                        $BT_daily['outcome'] = '';
+                    }
+                    $BT_daily['disease_name'] = $request->LB_diseasename;
+                    $BT_daily['symptom'] = $request->LB_diseaseCondition;
+                    $BT_daily['therapeuticWay'] = implode(",",$request->LB_therapeuticway);
+                    $BT_daily['note'] = $request->LB_note; 
+                    $LB_daily_treat= VeterTrimHoofDailyTreat::create($BT_daily);
+                    // 如果治疗方式包括药物治疗或输液疗法
+                    if(!empty($request->LB_drug_id)){                      
+                        $model = 'App\Models\VeterTrimHoofDailyDrugUse';
+                        $drug_id = $request->LB_drug_id;
+                        $daily_treat_id = $LB_daily_treat->id;
+                        $request['drugUse'] = $request->LB_drugUse;
+                        $request['dosage'] = $request->LB_dosage;
+                        $this->daily_drug_use($drug_id,$daily_treat_id,$request,$model);
+                    }
+
+                }
+                if($hoof == '4' && $request->RB_diseaseOrCare == '1'){
+                    $BT_daily = array();
+                    $BT_daily['veter_trim_id'] = $trims->id;
+                    $BT_daily['which_hoof'] = $hoof;
+                    $BT_daily['trim_date'] = $request->trim_day;
+                    $BT_daily['status'] = $request->RB_status;
+                    if($BT_daily['status'] =='done'){
+                        $BT_daily['dailycondition'] = '';
+                        $BT_daily['outcome'] =$request->RB_outcome;
+                    }else{
+                        $BT_daily['dailycondition'] =$request->RB_dailycondition;
+                        $BT_daily['outcome'] = '';
+                    }
+                    $BT_daily['disease_name'] = $request->RB_diseasename;
+                    $BT_daily['symptom'] = $request->RB_diseaseCondition;
+                    $BT_daily['therapeuticWay'] = implode(",",$request->RB_therapeuticway);
+                    $BT_daily['note'] = $request->RB_note; 
+                    $RB_daily_treat= VeterTrimHoofDailyTreat::create($BT_daily);
+                    // 如果治疗方式包括药物治疗或输液疗法
+                    if(!empty($request->RB_drug_id)){                      
+                        $model = 'App\Models\VeterTrimHoofDailyDrugUse';
+                        $drug_id = $request->RB_drug_id;
+                        $daily_treat_id = $RB_daily_treat->id;
+                        $request['drugUse'] = $request->RB_drugUse;
+                        $request['dosage'] = $request->RB_dosage;
+                        $this->daily_drug_use($drug_id,$daily_treat_id,$request,$model);
+                    }
+                }
+            }
+            return redirect()->back()->with('success','诊疗信息保存成功');
+           
+
+        }
         
     }
     public function repellent_single(){
@@ -380,14 +593,19 @@ class VeterController extends Controller
     }
 
     // 共用函数，存储当日用药，减库存
-    public function daily_drug_use($drug_id,$daily_treat_id,$i=0,$request)
+    public function daily_drug_use($drug_id,$daily_treat_id,$request,$model)
     {
+        $drug_id = $this->unique($drug_id);
         foreach($request->drugUse as $k=>$drugname){
             // dd($drugname);
             $daily_drug = array();
             $daily_drug['daily_treat_id'] = $daily_treat_id;
-            $daily_drug['drug_id'] = substr($request->drug_id,$i,1);
-            $i+=2;
+            // 截取drug_id,需要在每个逗号后截取,查找逗号第一次出现的位置
+            $pos = strpos($drug_id,',');
+            // dd($pos);
+            $daily_drug['drug_id'] = substr($drug_id,0,$pos);
+            // 重新赋值drug_id为剩下的字符串
+            $drug_id = substr($drug_id,$pos+1);
             $daily_drug['drug_name'] = mb_substr($drugname,0,mb_strpos($drugname,'，'));
             $daily_drug['dosage'] = $request->dosage[$k];
             // 对应库存表中的价格，当每选用一支，自动计算价格。价格选择有些复杂，直接选择兽医库存处的id最小的批次，用完再进行一下个。
@@ -395,8 +613,8 @@ class VeterController extends Controller
             $order_price=VeterDrugRemain::where('drug_id',$daily_drug['drug_id'])->where('remain','>',0)->first();
             $daily_drug['price'] = $order_price->price;
             // 因为物资的价格有变动，所以每次出库的时候，兽医库存表上应该有个批次和价格
-            $daily_drug['amount'] =$daily_drug['price'] * $daily_drug['dosage'];
-            VeterDailyDrugUse::create($daily_drug);
+            $daily_drug['amount'] =$daily_drug['price'] * $daily_drug['dosage'];           
+            $model::create($daily_drug);
             // 同时减去库存表中的量
             if($daily_drug['dosage'] <= $order_price->remain){
                 $order_price->remain = $order_price->remain -$daily_drug['dosage'];
@@ -426,7 +644,15 @@ class VeterController extends Controller
             'cattle_num'=>$cattle_num
         )           
         );
+    }
 
-
+    public function unique($str){  
+        //字符串中，需要去重的数据是以数字和“，”号连接的字符串，如$str,explode()是用逗号为分割，变成一个新的数组，见打印  
+        $arr = explode(',', $str);  
+        $arr = array_unique($arr);//内置数组去重算法  
+        $data = implode(',', $arr);  
+        // 本程序需要这个逗号
+        // $data = trim($data,',');//trim — 去除字符串首尾处的空白字符（或者其他字符）,假如不使用，后面会多个逗号  
+        return $data;//返回值，返回到函数外部  
     }
 }

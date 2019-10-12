@@ -19,7 +19,7 @@ class CreateVeterDailyTreatsTable extends Migration
             $table->string('cattle_id')->comment('对应的牛号,方便以后筛选');
             $table->string('cattleID')->comment('对应的牛耳标号');
             $table->string('treat_date')->comment('治疗日期');
-            $table->string('sysptom')->nullable()->comment('症状描述');
+            $table->string('symptom')->nullable()->comment('症状描述');
             $table->text('therapeuticWay')->nullable()->comment('治疗方式,因为是多选，怎么插入，以逗号分隔');
             $table->string('note')->nullable()->comment('说明备注');
             $table->string('PIC')->comment('当日执行兽医');

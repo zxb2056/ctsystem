@@ -36,7 +36,7 @@
                 </div>
                 
                                 <div class="card-body ">
-                                        <form action="/admin/manage/Veterinary/Quarantine_store" method="post">
+                                        <form action="/admin/manage/Veterinary/Quarantine_store" method="post" onkeydown="if(event.keyCode==13)return false;" >
                                           {{csrf_field()}}
                                                 <div class="form-group row">
                                                   <label for="cattleID" class="col-sm-3 col-form-label">牛号</label>

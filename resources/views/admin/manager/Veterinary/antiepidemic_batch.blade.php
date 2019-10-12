@@ -45,7 +45,7 @@
     <div class="mr-auto"><strong>批量新增防疫记录</strong></div>
   </div>
   <div class="card-body">
-    <form action="/admin/manage/Veterinary/antiepidemic/store" method="post">
+    <form action="/admin/manage/Veterinary/antiepidemic/store" method="post" onkeydown="if(event.keyCode==13)return false;" >
       {{csrf_field()}}
       <div class="form-group row">
         <label for="barn_id" class="col-md-2 col-form-label col-form-label-sm">牛舍号</label>

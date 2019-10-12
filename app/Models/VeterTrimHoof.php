@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class VeterTrimHoof extends Model
 {
     //
+    protected $guarded = ['id'];
 }
